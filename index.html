@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanoilicious - Khám phá Ẩm thực Hà Nội</title>
+    
+    <!-- Google Fonts: Nunito -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config for Custom Colors & Fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            orange: '#e89a3c',
+                            orangeDark: '#d9822b',
+                            light: '#faf9f6',
+                            dark: '#2d2d2d'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
+                        'float': '0 20px 40px -10px rgba(232, 154, 60, 0.2)',
+                        'modal': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                    },
+                    animation: {
+                        'ping-slow': 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            background-color: #faf9f6;
+            color: #2d2d2d;
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #e89a3c; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #d9822b; }
+        
+        /* Ẩn scrollbar cho thanh lọc quận nhưng vẫn vuốt được */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Hover Effects */
+        .filter-btn.active {
+            background-color: #e89a3c;
+            color: white;
+            border-color: #e89a3c;
+            box-shadow: 0 4px 14px 0 rgba(232, 154, 60, 0.39);
+        }
+
+        /* Highlight hiệu ứng tìm kiếm */
+        .search-highlight {
+            background-color: #ffe066;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        .hidden-result { display: none !important; }
+
+        /* CSS Animations cho Tooltip và Icon */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+
+        /* CSS Animation cho Text Logo */
+        @keyframes textShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        .logo-text-effect {
+            background: linear-gradient(to right, #2d2d2d 20%, #e89a3c 40%, #e89a3c 60%, #2d2d2d 80%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: textShine 4s linear infinite;
+        }
+        
+        /* Chống cắt chữ cho blog card */
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+
+        /* Animations cho Modal & Toast */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .toast-enter { animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+</head>
+<body class="antialiased font-sans flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- LOGO SECTION -->
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="window.scrollTo(0,0)">
+                    <div class="w-12 h-12 flex items-center justify-center relative">
+                        <svg viewBox="0 0 64 64" class="w-full h-full transform transition-transform duration-300 group-hover:scale-110 drop-shadow-sm" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 22 C 18 16 28 10 24 2" stroke="#d9822b" stroke-width="1.5" stroke-linecap="round" fill="none" class="animate-pulse"/>
+                            <path d="M38 24 C 34 18 44 12 38 4" stroke="#d9822b" stroke-width="1.5" stroke-linecap="round" fill="none" class="animate-pulse" style="animation-delay: 0.5s;"/>
+                            <path d="M8 32 L60 16" stroke="#5c3516" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M10 36 L62 20" stroke="#5c3516" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M12 34 C 12 50 24 56 32 56 C 40 56 52 50 52 34 Z" fill="#c28435" stroke="#5c3516" stroke-width="1.5"/>
+                            <ellipse cx="32" cy="34" rx="20" ry="5" fill="#e0ab67" stroke="#5c3516" stroke-width="1.5"/>
+                            <path d="M24 56 L40 56 L38 61 L26 61 Z" fill="#9e621d" stroke="#5c3516" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <span class="font-black text-[1.4rem] md:text-2xl tracking-tight uppercase logo-text-effect transform transition-transform duration-300 group-hover:scale-105">
+                        Hanoilicious
+                    </span>
+                </div>
+
+                <div class="hidden md:flex space-x-8">
+                    <a href="#" class="text-brand-orange font-bold border-b-2 border-brand-orange pb-1">Trang chủ</a>
+                    <a href="#benefits" class="text-gray-500 hover:text-brand-orange font-bold transition-colors">Về chúng tôi</a>
+                    <a href="#blog-section" class="text-gray-500 hover:text-brand-orange font-bold transition-colors">Blog Ẩm thực</a>
+                    <a href="#directory" class="text-gray-500 hover:text-brand-orange font-bold transition-colors">Bản đồ</a>
+                    <a href="#join-us" class="text-gray-500 hover:text-brand-orange font-bold transition-colors">Join With Us</a>
+                    <a href="#contact" class="text-gray-500 hover:text-brand-orange font-bold transition-colors">Liên hệ</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="openAuthModal()" class="bg-brand-orange hover:bg-brand-orangeDark text-white font-bold py-2 px-6 rounded-full transition-all shadow-md hover:shadow-float">Đăng Nhập</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative w-full h-[400px] md:h-[500px] flex flex-col justify-center items-center px-4 overflow-hidden">
+        <img src="pic1.png" alt="Hanoi Landscape" class="absolute inset-0 w-full h-full object-cover scale-[1.08] origin-top-left z-0">
+        <div class="absolute inset-0 bg-black/40 z-0"></div>
+        <div class="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-[#faf9f6] to-transparent z-10 pointer-events-none"></div>
+
+        <!-- SLOGAN -->
+        <div class="relative z-20 text-center mb-8 flex flex-col items-center">
+            <h1 class="text-5xl md:text-6xl font-black text-white mb-3 drop-shadow-lg tracking-tight uppercase">
+                Hanoilicious
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-100 font-bold drop-shadow-md max-w-2xl text-center px-4 italic">
+                "<span class="text-brand-orange">Ăn để nhớ</span>, nếm để thương."
+            </p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="w-full max-w-[650px] relative z-20">
+            <div class="bg-white/95 backdrop-blur-md rounded-full flex items-center px-6 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-shadow duration-300 border border-white/50">
+                <input type="text" id="searchInput" placeholder="Tìm quán ăn, món ngon... (VD: 'Phở Khôi Hói', 'Ba Đình')" class="w-full bg-transparent border-none outline-none text-gray-800 placeholder-gray-500 font-semibold text-[14px] md:text-[16px]">
+                <button id="searchBtn" class="text-brand-orange hover:text-brand-orangeDark transition-colors ml-3 flex-shrink-0">
+                    <i data-lucide="search" class="w-7 h-7"></i>
+                </button>
+            </div>
+            
+            <div id="searchSuggestions" class="absolute w-full left-0 top-full mt-3 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden hidden flex-col z-50 max-h-[300px] overflow-y-auto">
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow">
+        
+        <!-- LỢI ÍCH SẢN PHẨM -->
+        <section id="benefits" class="mb-16 bg-white rounded-[2.5rem] p-8 md:p-14 shadow-soft border border-gray-100">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-black text-brand-dark uppercase tracking-wide">Tại sao chọn Hanoilicious?</h2>
+                <div class="w-24 h-1.5 bg-brand-orange mx-auto mt-6 rounded-full"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12">
+                <div class="flex flex-col items-center text-center p-6 rounded-3xl hover:bg-gray-50 transition-colors">
+                    <div class="w-20 h-20 bg-blue-50 rounded-[1.5rem] flex items-center justify-center mb-6 text-blue-500 shadow-sm animate-float">
+                        <i data-lucide="shield-check" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="font-black text-xl mb-3 text-gray-900">Review Đáng Tin Cậy</h3>
+                    <p class="text-base text-gray-600 leading-relaxed">Nâng cao độ tin cậy với hệ thống review xác thực từ người dùng và người địa phương, đảm bảo thông tin minh bạch.</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-6 rounded-3xl hover:bg-gray-50 transition-colors">
+                    <div class="w-20 h-20 bg-green-50 rounded-[1.5rem] flex items-center justify-center mb-6 text-green-500 shadow-sm animate-float" style="animation-delay: 0.5s;">
+                        <i data-lucide="search" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="font-black text-xl mb-3 text-gray-900">Tối Ưu Hóa Tìm Kiếm</h3>
+                    <p class="text-base text-gray-600 leading-relaxed">Gợi ý quán ăn chính xác, nhanh chóng theo vị trí hiện tại với bản đồ tích hợp và bộ lọc tìm kiếm nâng cao thông minh.</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-6 rounded-3xl hover:bg-gray-50 transition-colors">
+                    <div class="w-20 h-20 bg-orange-50 rounded-[1.5rem] flex items-center justify-center mb-6 text-brand-orange shadow-sm animate-float" style="animation-delay: 1s;">
+                        <i data-lucide="map-pin" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="font-black text-xl mb-3 text-gray-900">Tiếp Cận Quán Local</h3>
+                    <p class="text-base text-gray-600 leading-relaxed">Giúp bạn dễ dàng khám phá các quán ăn mang đậm chất địa phương nằm sâu trong từng con ngõ nhỏ của Thủ đô.</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-6 rounded-3xl hover:bg-gray-50 transition-colors">
+                    <div class="w-20 h-20 bg-purple-50 rounded-[1.5rem] flex items-center justify-center mb-6 text-purple-500 shadow-sm animate-float" style="animation-delay: 1.5s;">
+                        <i data-lucide="users" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="font-black text-xl mb-3 text-gray-900">Cộng Đồng Ẩm Thực</h3>
+                    <p class="text-base text-gray-600 leading-relaxed">Tham gia vào cộng đồng sành ăn lớn nhất Hà Nội. Nơi tự do chia sẻ đam mê và kết nối những tâm hồn yêu ẩm thực.</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-6 rounded-3xl hover:bg-gray-50 transition-colors">
+                    <div class="w-20 h-20 bg-red-50 rounded-[1.5rem] flex items-center justify-center mb-6 text-red-500 shadow-sm animate-float" style="animation-delay: 2s;">
+                        <i data-lucide="clock" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="font-black text-xl mb-3 text-gray-900">Tiết Kiệm Thời Gian</h3>
+                    <p class="text-base text-gray-600 leading-relaxed">Tạm biệt câu hỏi "Hôm nay ăn gì?". Giao diện trực quan giúp bạn chốt đơn địa điểm tụ tập chỉ trong vài giây.</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-6 rounded-3xl hover:bg-gray-50 transition-colors">
+                    <div class="w-20 h-20 bg-teal-50 rounded-[1.5rem] flex items-center justify-center mb-6 text-teal-500 shadow-sm animate-float" style="animation-delay: 2.5s;">
+                        <i data-lucide="camera" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="font-black text-xl mb-3 text-gray-900">Trải Nghiệm Trực Quan</h3>
+                    <p class="text-base text-gray-600 leading-relaxed">Hình ảnh sắc nét, video review chân thực giúp bạn dễ dàng mường tượng ra hương vị ngay từ cái nhìn đầu tiên.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2-Column Layout CHÍNH -->
+        <div class="flex flex-col lg:flex-row gap-10">
+            <!-- LEFT COLUMN -->
+            <div class="flex-1 flex flex-col gap-12 w-full lg:w-[65%]">
+                
+                <!-- BLOG SECTION -->
+                <section id="blog-section" class="bg-white rounded-3xl p-5 md:p-8 shadow-soft border border-gray-100">
+                    <div class="flex flex-col mb-8 gap-2">
+                        <h2 class="text-2xl font-black text-brand-dark uppercase tracking-wide">
+                            <i data-lucide="book-open" class="inline-block w-6 h-6 mr-2 text-brand-orange mb-1"></i>
+                            Blog Ẩm Thực
+                        </h2>
+                        <p class="text-gray-500 text-sm">25 Món ngon đặc sắc bạn nhất định phải thử khi đến Hà Nội.</p>
+                    </div>
+
+                    <!-- Danh sách các bài Blog sẽ được JS đổ vào đây -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="dynamic-blog-list">
+                        <!-- Thẻ Blog Render từ JavaScript -->
+                    </div>
+                    
+                    <!-- Nút xem thêm Blog -->
+                    <div class="w-full text-center mt-8">
+                        <button id="loadMoreBlogBtn" class="bg-brand-orange/10 hover:bg-brand-orange hover:text-white text-brand-orange font-bold py-3 px-8 rounded-xl transition-colors">
+                            Xem thêm bài viết...
+                        </button>
+                    </div>
+                </section>
+
+                <!-- MEGA RESTAURANT DIRECTORY (Bản đồ Quán Ngon) -->
+                <section id="directory" class="bg-white rounded-3xl p-5 md:p-8 shadow-soft border border-gray-100">
+                    <div class="flex flex-col mb-8 gap-4">
+                        <h2 class="text-2xl font-black text-brand-dark uppercase tracking-wide">
+                            <i data-lucide="map" class="inline-block w-6 h-6 mr-2 text-brand-orange mb-1"></i>
+                            Bản Đồ Quán Ngon
+                        </h2>
+                        
+                        <!-- Lọc 12 Quận -->
+                        <div class="flex overflow-x-auto pb-2 gap-2 no-scrollbar w-full" id="district-filters">
+                            <!-- Render by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Danh sách Quán Ăn sẽ được JS đổ vào đây -->
+                    <div class="flex flex-col gap-10" id="dynamic-restaurant-list">
+                        <!-- Cards with integrated Google Maps & Reviews go here -->
+                    </div>
+                    
+                    <!-- Nút tải thêm -->
+                    <div class="w-full text-center mt-8">
+                        <button id="loadMoreBtn" class="bg-gray-100 hover:bg-brand-orange hover:text-white text-gray-700 font-bold py-3 px-8 rounded-xl transition-colors hidden">
+                            Xem thêm quán...
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- RIGHT COLUMN: Sidebar Reviews & Video -->
+            <aside class="w-full lg:w-[35%] flex flex-col gap-8">
+                
+                <!-- VIDEO SẢN PHẨM/DỊCH VỤ -->
+                <div class="sticky top-28">
+                    <h2 class="text-2xl font-black text-brand-dark uppercase tracking-wide mb-6">Trải Nghiệm Thực Tế</h2>
+                    <div class="bg-white rounded-3xl shadow-soft p-4 border border-gray-50 mb-8">
+                        <div class="w-full aspect-video rounded-2xl overflow-hidden bg-gray-100">
+                            <!-- Nhúng Video YouTube giới thiệu Ẩm thực Hà Nội -->
+                            <!-- CHÚ Ý: Sau này có video chính thức, bạn thay link vào thuộc tính src="..." ở dưới -->
+                            <iframe 
+                                width="100%" 
+                                height="100%" 
+                                src="https://www.youtube.com/embed/Yn1Y5yU1mEI?autoplay=0&mute=0" 
+                                title="Hanoi Street Food" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-4 px-2 font-medium text-center">
+                            Theo chân Food Blogger khám phá các ngóc ngách ẩm thực đường phố Hà Nội vạn người mê.
+                        </p>
+                    </div>
+
+                    <!-- REVIEW NỔI BẬT -->
+                    <h2 class="text-2xl font-black text-brand-dark uppercase tracking-wide mb-6" id="reviews">Review Nổi Bật</h2>
+                    <div class="bg-white rounded-3xl shadow-soft p-6 border border-gray-50 flex flex-col gap-6">
+                        <div class="border-b border-gray-100 pb-5">
+                            <div class="flex items-center gap-3 mb-2">
+                                <img src="https://i.pravatar.cc/150?img=33" class="w-10 h-10 rounded-full">
+                                <div><h4 class="font-bold text-sm">Tuấn Phong</h4><p class="text-xs text-gray-500">Local Guide • Lò Bánh Bao</p></div>
+                            </div>
+                            <div class="text-yellow-400 text-xs mb-2">★★★★★</div>
+                            <p class="text-sm text-gray-600">Bánh ở đây vỏ siêu xốp, nhân đậm đà ngon bá cháy. Tiệm nhỏ trong ngõ nhưng mua đông lắm!</p>
+                        </div>
+                        <div class="border-b border-gray-100 pb-5">
+                            <div class="flex items-center gap-3 mb-2">
+                                <img src="https://i.pravatar.cc/150?img=5" class="w-10 h-10 rounded-full">
+                                <div><h4 class="font-bold text-sm">Mai Linh</h4><p class="text-xs text-gray-500">@linh_eat • Cà Phê Thái</p></div>
+                            </div>
+                            <div class="text-yellow-400 text-xs mb-2">★★★★★</div>
+                            <p class="text-sm text-gray-600">Vị cà phê cổ truyền không lẫn vào đâu được. Quán có tuổi đời lâu năm, không gian hoài cổ cực chill.</p>
+                        </div>
+                        <div class="pb-2">
+                            <div class="flex items-center gap-3 mb-2">
+                                <img src="https://i.pravatar.cc/150?img=11" class="w-10 h-10 rounded-full">
+                                <div><h4 class="font-bold text-sm">Hải Nam</h4><p class="text-xs text-gray-500">Food Blogger • Quán Kiến</p></div>
+                            </div>
+                            <div class="text-yellow-400 text-xs mb-2">★★★★★</div>
+                            <p class="text-sm text-gray-600">Món xôi trứng kiến ở đây là đỉnh của chóp, ăn kèm thịt ngựa nướng chuẩn bài luôn.</p>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- FORM ĐĂNG KÝ JOIN WITH US -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 w-full" id="join-us">
+        <div class="bg-brand-orange/10 rounded-3xl p-8 md:p-12 border border-brand-orange/20 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+            <i data-lucide="users" class="absolute -right-10 -bottom-10 w-64 h-64 text-brand-orange/10 rotate-12"></i>
+            <div class="flex-1 relative z-10 mb-6 md:mb-0">
+                <h2 class="text-2xl md:text-3xl font-black text-brand-dark mb-3">Join With Us</h2>
+                <p class="text-gray-600 text-sm md:text-base">Trở thành một phần của Hanoilicious! Tham gia cộng đồng để nhận danh sách quán ăn mới nổi mỗi tuần và các voucher độc quyền từ chúng tôi.</p>
+            </div>
+            
+            <!-- Box Form điền thông tin -->
+            <div class="w-full md:w-[450px] relative z-10 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                <form class="flex flex-col gap-4" onsubmit="event.preventDefault(); showToast('Chào mừng bạn đã gia nhập cộng đồng Hanoilicious!');">
+                    <div>
+                        <input type="text" placeholder="Họ và tên..." required class="w-full px-5 py-3 rounded-xl border border-gray-200 outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all">
+                    </div>
+                    <div>
+                        <input type="tel" placeholder="Số điện thoại..." required class="w-full px-5 py-3 rounded-xl border border-gray-200 outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all">
+                    </div>
+                    <div>
+                        <input type="email" placeholder="Địa chỉ email..." required class="w-full px-5 py-3 rounded-xl border border-gray-200 outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 transition-all">
+                    </div>
+                    <button type="submit" class="w-full bg-brand-orange hover:bg-brand-orangeDark text-white font-bold py-3.5 px-8 rounded-xl transition-colors shadow-md mt-2 flex items-center justify-center gap-2">
+                        Tham gia ngay <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </form>
+                <p class="text-xs text-gray-500 mt-4 text-center">* Chúng tôi cam kết bảo mật thông tin của bạn.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- THÔNG TIN LIÊN LẠC (CONTACT) -->
+    <footer id="contact" class="bg-brand-dark text-white pt-16 pb-8 border-t-4 border-brand-orange">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+                <div>
+                    <h3 class="text-2xl font-black text-brand-orange mb-4 uppercase tracking-wide">Hanoilicious</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">Dự án cộng đồng nhằm lưu giữ và lan tỏa bản đồ ẩm thực truyền thống cũng như hiện đại của Thủ đô Hà Nội qua góc nhìn chân thực nhất.</p>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/people/Hanoilicious/61588850601536/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:bg-blue-600 transition-all transform hover:scale-110 shadow-md border-2 border-transparent hover:border-white" title="Theo dõi chúng tôi trên Facebook">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4 uppercase tracking-wider text-white">Liên Hệ Trực Tiếp</h4>
+                    <ul class="space-y-4 text-gray-400 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-brand-orange flex-shrink-0"></i>
+                            <span>Số 2 Phạm Văn Đồng, Hanoi, Vietnam</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="phone" class="w-5 h-5 text-brand-orange flex-shrink-0"></i>
+                            <span>Hotline: 0843321400</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="mail" class="w-5 h-5 text-brand-orange flex-shrink-0"></i>
+                            <span>Email: hanoilicious@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Cột thứ 3: Chứa nút kêu gọi hành động thay vì liên kết nhanh -->
+                <div class="flex flex-col items-start lg:items-center justify-center">
+                    <h4 class="text-lg font-bold mb-6 uppercase tracking-wider text-white">Đóng góp cho cộng đồng</h4>
+                    <button onclick="openReviewRequestModal()" class="relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-brand-orange px-8 font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
+                        <span class="absolute inline-flex h-full w-full animate-ping-slow rounded-full bg-brand-orange opacity-40"></span>
+                        <span class="relative flex items-center gap-2">
+                            <i data-lucide="camera" class="w-5 h-5"></i> Yêu cầu review quán
+                        </span>
+                    </button>
+                    <p class="text-gray-400 text-xs mt-4 text-center">Bạn có quán "ruột" muốn Hanoilicious đến thẩm định? Đừng ngần ngại cho chúng tôi biết!</p>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 text-center">
+                <p class="text-gray-500 text-sm font-semibold">&copy; 2026 Hanoilicious. Bản đồ ẩm thực số 1 Hà Nội. Mọi quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <div id="authModal" class="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm hidden items-center justify-center px-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-modal overflow-hidden transform scale-95 transition-transform duration-300 relative" id="authModalContent">
+            <!-- Nút Đóng -->
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition-colors z-10">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Tabs: Đăng Nhập / Đăng Ký -->
+            <div class="flex border-b border-gray-100">
+                <button id="tabLogin" onclick="switchAuthTab('login')" class="flex-1 py-4 font-bold text-brand-orange border-b-2 border-brand-orange bg-brand-orange/5 transition-colors">Đăng Nhập</button>
+                <button id="tabRegister" onclick="switchAuthTab('register')" class="flex-1 py-4 font-bold text-gray-400 hover:text-gray-600 transition-colors">Đăng Ký</button>
+            </div>
+
+            <!-- Form Đăng Nhập -->
+            <div id="formLogin" class="p-8 animate-fade-in block">
+                <h3 class="text-2xl font-black text-gray-900 mb-6 text-center">Mừng bạn trở lại!</h3>
+                <form onsubmit="event.preventDefault(); submitAuth('Đăng nhập thành công!');">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Email</label>
+                            <input type="email" required placeholder="nhapemail@gmail.com" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 outline-none transition-all">
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-sm font-bold text-gray-700">Mật khẩu</label>
+                                <a href="#" class="text-xs text-brand-orange font-semibold hover:underline">Quên mật khẩu?</a>
+                            </div>
+                            <input type="password" required placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 outline-none transition-all">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-brand-orange hover:bg-brand-orangeDark text-white font-bold py-3.5 rounded-xl mt-8 transition-colors shadow-md">Đăng Nhập</button>
+                </form>
+                
+                <div class="mt-6 text-center text-sm text-gray-500">Hoặc đăng nhập bằng</div>
+                <div class="flex justify-center gap-4 mt-4">
+                    <button class="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" class="w-5 h-5" alt="Google">
+                    </button>
+                    <button class="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center text-[#1877F2] hover:bg-gray-50 transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form Đăng Ký -->
+            <div id="formRegister" class="p-8 hidden">
+                <h3 class="text-2xl font-black text-gray-900 mb-6 text-center">Tạo tài khoản mới</h3>
+                <form onsubmit="event.preventDefault(); submitAuth('Đăng ký tài khoản thành công! Hãy kiểm tra email.');">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Họ và tên</label>
+                            <input type="text" required placeholder="Nguyễn Văn A" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Email</label>
+                            <input type="email" required placeholder="nhapemail@gmail.com" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Mật khẩu</label>
+                            <input type="password" required placeholder="Tạo mật khẩu (ít nhất 6 ký tự)" minlength="6" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 outline-none transition-all">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-brand-dark hover:bg-black text-white font-bold py-3.5 rounded-xl mt-8 transition-colors shadow-md">Đăng Ký Tài Khoản</button>
+                </form>
+                <div class="mt-5 text-center text-xs text-gray-500">
+                    Bằng việc đăng ký, bạn đồng ý với <a href="#" class="text-brand-orange hover:underline">Điều khoản dịch vụ</a> và <a href="#" class="text-brand-orange hover:underline">Chính sách bảo mật</a> của chúng tôi.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL GỬI YÊU CẦU REVIEW -->
+    <div id="reviewRequestModal" class="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm hidden items-center justify-center px-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-modal overflow-hidden transform scale-95 transition-transform duration-300 relative" id="reviewRequestModalContent">
+            <!-- Nút Đóng -->
+            <button onclick="closeReviewRequestModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition-colors z-10">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Header -->
+            <div class="bg-brand-orange/10 p-6 border-b border-brand-orange/20">
+                <h3 class="text-2xl font-black text-brand-dark flex items-center gap-2">
+                    <i data-lucide="message-square-plus" class="text-brand-orange"></i> Gửi Yêu Cầu Review Quán
+                </h3>
+                <p class="text-sm text-gray-600 mt-2">Bạn có quán "ruột" muốn chúng tôi đến thẩm định? Hãy điền thông tin bên dưới nhé!</p>
+            </div>
+
+            <!-- Form -->
+            <div class="p-6">
+                <form onsubmit="event.preventDefault(); submitReviewRequest();">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Tên của bạn <span class="text-red-500">*</span></label>
+                            <input type="text" required placeholder="Nhập tên..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 outline-none transition-all">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-1">Số điện thoại</label>
+                                <input type="tel" placeholder="Nhập SĐT..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 outline-none transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
+                                <input type="email" required placeholder="Nhập email..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 outline-none transition-all">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">Yêu cầu của bạn (Tên quán, địa chỉ...) <span class="text-red-500">*</span></label>
+                            <textarea required rows="3" placeholder="Hãy cho chúng tôi biết tên và địa chỉ quán bạn muốn yêu cầu review nhé..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/20 outline-none transition-all resize-none"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-brand-orange hover:bg-brand-orangeDark text-white font-bold py-3.5 rounded-xl mt-6 transition-colors shadow-md flex justify-center items-center gap-2">
+                        Gửi Yêu Cầu <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION (Box thông báo) -->
+    <div id="toastContainer" class="fixed top-24 right-4 z-[110] flex flex-col gap-2 pointer-events-none">
+        <!-- Các Toast sẽ được nhúng vào đây bằng JS -->
+    </div>
+
+    <!-- SCRIPT CHÍNH -->
+    <script>
+        lucide.createIcons();
+
+        // =========================================================================
+        // LOGIC MODAL ĐĂNG NHẬP / ĐĂNG KÝ VÀ TOAST THÔNG BÁO
+        // =========================================================================
+        const modal = document.getElementById('authModal');
+        const modalContent = document.getElementById('authModalContent');
+        const tabLogin = document.getElementById('tabLogin');
+        const tabRegister = document.getElementById('tabRegister');
+        const formLogin = document.getElementById('formLogin');
+        const formRegister = document.getElementById('formRegister');
+
+        function openAuthModal() {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // Timeout để hiệu ứng transition opacity/scale chạy mượt
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeAuthModal() {
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300); // Đợi CSS transition chạy xong mới ẩn DOM
+        }
+
+        function switchAuthTab(tab) {
+            if (tab === 'login') {
+                tabLogin.classList.replace('text-gray-400', 'text-brand-orange');
+                tabLogin.classList.add('border-b-2', 'border-brand-orange', 'bg-brand-orange/5');
+                tabLogin.classList.remove('hover:text-gray-600');
+                
+                tabRegister.classList.replace('text-brand-orange', 'text-gray-400');
+                tabRegister.classList.remove('border-b-2', 'border-brand-orange', 'bg-brand-orange/5');
+                tabRegister.classList.add('hover:text-gray-600');
+
+                formRegister.classList.remove('animate-fade-in');
+                formRegister.classList.add('hidden');
+                formRegister.classList.remove('block');
+                
+                formLogin.classList.add('block', 'animate-fade-in');
+                formLogin.classList.remove('hidden');
+            } else {
+                tabRegister.classList.replace('text-gray-400', 'text-brand-orange');
+                tabRegister.classList.add('border-b-2', 'border-brand-orange', 'bg-brand-orange/5');
+                tabRegister.classList.remove('hover:text-gray-600');
+                
+                tabLogin.classList.replace('text-brand-orange', 'text-gray-400');
+                tabLogin.classList.remove('border-b-2', 'border-brand-orange', 'bg-brand-orange/5');
+                tabLogin.classList.add('hover:text-gray-600');
+
+                formLogin.classList.remove('animate-fade-in');
+                formLogin.classList.add('hidden');
+                formLogin.classList.remove('block');
+                
+                formRegister.classList.add('block', 'animate-fade-in');
+                formRegister.classList.remove('hidden');
+            }
+        }
+
+        // Hàm tạo Box Thông báo (Toast)
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            
+            const toast = document.createElement('div');
+            toast.className = `toast-enter flex items-center gap-3 px-5 py-4 rounded-xl shadow-lg border pointer-events-auto bg-white`;
+            
+            // Chọn icon theo loại thông báo
+            const iconHTML = type === 'success' 
+                ? `<div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-500 flex-shrink-0"><i data-lucide="check-circle" class="w-5 h-5"></i></div>`
+                : `<div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 flex-shrink-0"><i data-lucide="info" class="w-5 h-5"></i></div>`;
+            
+            toast.innerHTML = `
+                ${iconHTML}
+                <p class="text-sm font-bold text-gray-800 flex-1">${message}</p>
+                <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+            `;
+            
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            // Tự động ẩn sau 4 giây
+            setTimeout(() => {
+                if(toast.parentElement) {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateX(100%)';
+                    toast.style.transition = 'all 0.3s ease-in';
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 4000);
+        }
+
+        // Xử lý khi Submit form trong Modal Auth
+        function submitAuth(msg) {
+            closeAuthModal();
+            // Đợi modal đóng hẵng hiện Toast cho đẹp
+            setTimeout(() => {
+                showToast(msg, 'success');
+            }, 300);
+            
+            // Reset form
+            document.querySelectorAll('#authModalContent form').forEach(f => f.reset());
+        }
+
+        // Đóng modal khi click ra vùng đen bên ngoài (Modal Auth)
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeAuthModal();
+            }
+        });
+
+        // =========================================================================
+        // LOGIC MODAL GỬI YÊU CẦU REVIEW
+        // =========================================================================
+        const reviewModal = document.getElementById('reviewRequestModal');
+        const reviewModalContent = document.getElementById('reviewRequestModalContent');
+
+        window.openReviewRequestModal = function() {
+            reviewModal.classList.remove('hidden');
+            reviewModal.classList.add('flex');
+            setTimeout(() => {
+                reviewModal.classList.remove('opacity-0');
+                reviewModal.classList.add('opacity-100');
+                reviewModalContent.classList.remove('scale-95');
+                reviewModalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        window.closeReviewRequestModal = function() {
+            reviewModal.classList.remove('opacity-100');
+            reviewModal.classList.add('opacity-0');
+            reviewModalContent.classList.remove('scale-100');
+            reviewModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                reviewModal.classList.add('hidden');
+                reviewModal.classList.remove('flex');
+            }, 300);
+        }
+
+        window.submitReviewRequest = function() {
+            closeReviewRequestModal();
+            setTimeout(() => {
+                showToast('Yêu cầu review của bạn đã được gửi thành công. Cảm ơn bạn!', 'success');
+            }, 300);
+            document.querySelectorAll('#reviewRequestModalContent form').forEach(f => f.reset());
+        }
+
+        // Đóng modal review khi click ra vùng đen bên ngoài
+        reviewModal.addEventListener('click', (e) => {
+            if (e.target === reviewModal) {
+                closeReviewRequestModal();
+            }
+        });
+
+
+        // =========================================================================
+        // 1. DATA BLOG
+        // =========================================================================
+        const blogData = [
+            { title: "Phở Hà Nội", imgFile: "anh-pho.jpg", desc: "Phở là món ăn kinh điển bạn nhất định không nên bỏ lỡ. Nước dùng đậm đà được ninh từ xương bò cùng quế, hồi, thảo quả. Sự kết hợp giữa thịt bò mềm, sợi phở trắng tinh tạo nên một bát phở thơm lừng không thể cưỡng lại." },
+            { title: "Bún chả", imgFile: "anh-bun-cha.jpg", desc: "Một phần điển hình bao gồm bún, thịt heo nướng, rau sống và nước chấm chua ngọt. Chính phần nước chấm được nêm thêm tỏi, ớt và giấm thanh dịu là linh hồn làm nên hương vị đặc biệt của bún chả." },
+            { title: "Chả cá Lã Vọng", imgFile: "anh-cha-ca.jpg", desc: "Cá lăng, cá trê thái lát được ướp gia vị và nướng than, sau đó xào trên chảo nóng. Món này ăn kèm với mắm tôm, chanh, ớt, đậu phộng rang và các loại rau thơm tươi vô cùng nịnh miệng." },
+            { title: "Bún đậu mắm tôm", imgFile: "anh-bun-dau.jpg", desc: "Sự kết hợp hoàn hảo giữa bún, đậu phụ chiên giòn và mắm tôm. Mẹt bún thường có thêm chân giò luộc, thịt ba chỉ, chả cốm, nem rán. Mắm tôm cay nồng đánh sủi bọt là điểm nhấn khó quên." },
+            { title: "Bún thang", imgFile: "anh-bun-thang.jpg", desc: "Món bún truyền thống, thanh lịch của Hà Nội. Nguyên liệu được thái sợi mỏng đẹp mắt gồm: bún, nước dùng xương gà, ruốc tôm, thịt gà xé, giò lụa, củ cải muối, trứng chiên, nấm hương..." },
+            { title: "Xôi khúc / Bánh khúc", imgFile: "anh-xoi-khuc.jpg", desc: "Làm từ lá khúc, gạo nếp, thịt mỡ và đậu xanh. Món xôi xôi dẻo bùi này hiện nay thường được ăn kèm với nhiều loại topping như xúc xích, pate, trứng thịt kho... cực kỳ hợp làm bữa sáng." },
+            { title: "Bánh cuốn", imgFile: "anh-banh-cuon.jpg", desc: "Làm từ bột gạo hấp tráng mỏng, nhân nấm mộc nhĩ băm nhỏ và thịt lợn, phủ bên trên là hành phi giòn rụm. Ăn kèm nước chấm chua ngọt, chả quế, rau sống thanh mát." },
+            { title: "Kem Tràng Tiền", imgFile: "anh-kem-trang-tien.jpg", desc: "Món tráng miệng truyền thống của người Hà Nội. Dù có nhiều thương hiệu mới nổi, kem Tràng Tiền vẫn được ưa chuộng bởi hương vị tươi ngon tự nhiên như kem cốm, khoai môn, đậu xanh." },
+            { title: "Cà phê trứng", imgFile: "anh-ca-phe-trung.jpg", desc: "Thức uống đặc biệt chinh phục cả khách quốc tế. Hương vị là sự hòa quyện hoàn hảo giữa vị đắng đậm đà của cà phê và lớp bọt mịn màng, béo ngậy của lòng đỏ trứng đánh bông." },
+            { title: "Bún ốc", imgFile: "anh-bun-oc.jpg", desc: "Phổ biến khắp Hà Nội, nước dùng bún ốc có vị chua thanh từ cà chua và dấm bỗng. Ăn kèm những con ốc giòn sần sật, đậu phụ chiên, rau sống và chút mắm tôm nguyên bản." },
+            { title: "Bún cá", imgFile: "anh-bun-ca.jpg", desc: "Món ăn lý tưởng cho mùa hè với độ chua ngọt vừa phải. Những miếng cá chiên giòn ngâm trong nước dùng từ dứa, cà chua và cần tây, cực kỳ dễ ăn và thanh mát." },
+            { title: "Bánh rán mặn", imgFile: "anh-banh-ran-man.jpg", desc: "Thức quà vặt gắn liền với tuổi thơ. Vỏ bánh rán giòn rụm, nhân thơm đầy đặn với thịt, miến, mộc nhĩ. Ăn kèm nước chấm chua cay và dưa góp đu đủ rôm rốp." },
+            { title: "Nộm bò khô", imgFile: "anh-nom-bo-kho.jpg", desc: "Giúp bạn tỉnh táo hơn vào buổi chiều. Độ giòn của đu đủ xanh kết hợp nước mắm đậm đà, thêm những miếng thịt bò khô, lá lách dai giòn tạo nên độ cuốn khó cưỡng." },
+            { title: "Bánh chè lam, bánh khảo", imgFile: "anh-che-lam.jpg", desc: "Đặc sản làm quà tuyệt vời. Chè lam dẻo thơm, bùi béo đậu phộng và cay nhẹ vị gừng. Bánh khảo kết hợp hài hòa gạo nếp và tinh dầu bưởi, rất hợp thưởng trà." },
+            { title: "Bánh giò", imgFile: "anh-banh-gio.jpg", desc: "Làm từ bột gạo tẻ mềm mướt, nhân nấm mộc nhĩ, thịt lợn băm nêm nếm đậm đà bọc trong lá chuối. Khi ăn rưới thêm chút tương ớt cay nồng là chuẩn bài." },
+            { title: "Chả rươi", imgFile: "anh-cha-ruoi.jpg", desc: "Đặc sản mùa rươi với miếng chả bên ngoài vàng giòn, bên trong thịt mềm béo. Vị ngậy của rươi hòa cùng trứng, vỏ quýt tạo nên món ăn vô cùng đặc biệt." },
+            { title: "Cốm Hà Nội", imgFile: "anh-com.jpg", desc: "Thức quà tinh tế của mùa thu mang mùi thơm nhẹ nhàng, vị dẻo bùi của lúa non gói trong lá sen. Cốm còn được chế biến thành xôi cốm, chè cốm, chả cốm rất ngon." },
+            { title: "Bánh cốm", imgFile: "anh-banh-com.jpg", desc: "Món quà cưới truyền thống làm từ cốm tươi bọc nhân đậu xanh dẻo mịn. Lớp vỏ màu xanh đặc trưng, thơm dịu nhẹ, là món quà biếu đầy ý nghĩa." },
+            { title: "Nem chay", imgFile: "anh-nem-chay.jpg", desc: "Thường xuất hiện trong dịp rằm hoặc lễ Tết. Biến tấu từ nem truyền thống, nem chay thanh đạm nhưng vẫn giữ được hương vị thơm ngon và độ giòn rụm." },
+            { title: "Xôi xéo", imgFile: "anh-xoi-xeo.jpg", desc: "Món ăn sáng đặc trưng với hạt nếp vàng óng, đậu xanh giã nhuyễn, hành phi thơm lừng và mỡ gà béo ngậy. Gói trong lá sen mang lại hương vị bùi béo khó quên." },
+            { title: "Bánh tôm Hồ Tây", imgFile: "anh-banh-tom.jpg", desc: "Vỏ bột chiên giòn kèm khoai lang thái sợi bao bọc lấy những con tôm tươi rói. Thưởng thức bánh tôm dọc đường Thanh Niên lộng gió là trải nghiệm tuyệt vời." },
+            { title: "Bánh đúc nóng", imgFile: "anh-banh-duc.jpg", desc: "Món ăn mộc mạc thấm đậm tình người. Vị ngậy của cốt bánh mềm mượt, kết hợp thịt băm mộc nhĩ xào đậm đà và nước mắm ngọt tạo cảm giác lạ lạ quen quen." },
+            { title: "Nem chua rán", imgFile: "anh-nem-chua-ran.jpg", desc: "Món ăn vặt đường phố \"huyền thoại\" làm từ thịt xay trộn bì lợn, lăn qua bột chiên xù vàng giòn. Chấm cùng tương ớt đặc chế cay ngọt siêu nịnh miệng." },
+            { title: "Lạc rang húng lìu", imgFile: "anh-lac-rang.jpg", desc: "Sự kết hợp giữa vị bùi béo của những hạt lạc mẩy, mặn ngọt hài hòa và mùi thơm nồng nàn quyến rũ từ gia vị húng lìu đặc trưng phố cổ." },
+            { title: "Giò chả Ước Lễ", imgFile: "anh-gio-cha.jpg", desc: "Đặc sản lừng danh với bề dày lịch sử hơn 500 năm. Giò chả dai giòn sần sật, thơm mùi thịt tươi và nước mắm cốt, là tinh hoa văn hóa ẩm thực dịp Lễ, Tết." }
+        ];
+
+        let blogDisplayed = 6;
+        
+        function renderBlog() {
+            const container = document.getElementById('dynamic-blog-list');
+            container.innerHTML = ''; 
+
+            for(let i = 0; i < Math.min(blogDisplayed, blogData.length); i++) {
+                const item = blogData[i];
+                const placeholderUrl = `https://placehold.co/600x400/f3f4f6/a1a1aa?text=Chua+co+anh:\\n${item.imgFile}`;
+                
+                const cardHTML = `
+                    <div class="food-card bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full hover:shadow-lg transition-all">
+                        <div class="h-48 md:h-56 overflow-hidden relative bg-gray-100 flex items-center justify-center">
+                            <img src="${item.imgFile}" alt="${item.title}" class="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                                 onerror="this.onerror=null; this.src='${placeholderUrl}'">
+                            
+                            <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-black text-brand-orange shadow-sm flex items-center gap-1">
+                                <i data-lucide="star" class="w-3 h-3"></i> Món ngon
+                            </div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="font-black text-xl text-gray-900 mb-3">${item.title}</h3>
+                            <p id="blog-desc-${i}" class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-5 flex-grow transition-all duration-300">${item.desc}</p>
+                            <button onclick="toggleBlogDesc(${i})" class="text-brand-orange font-bold text-sm flex items-center gap-1 hover:translate-x-2 transition-transform w-max mt-auto cursor-pointer group">
+                                <span id="blog-btn-text-${i}">Đọc tiếp</span> <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover:translate-x-1" id="blog-btn-icon-${i}"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHTML);
+            }
+            lucide.createIcons();
+
+            const btn = document.getElementById('loadMoreBlogBtn');
+            if (blogDisplayed >= blogData.length) {
+                btn.classList.add('hidden');
+            } else {
+                btn.classList.remove('hidden');
+            }
+        }
+
+        window.toggleBlogDesc = function(index) {
+            const descEl = document.getElementById(`blog-desc-${index}`);
+            const textEl = document.getElementById(`blog-btn-text-${index}`);
+            const iconEl = document.getElementById(`blog-btn-icon-${index}`);
+            
+            if (descEl.classList.contains('line-clamp-3')) {
+                descEl.classList.remove('line-clamp-3');
+                textEl.textContent = 'Thu gọn';
+                iconEl.setAttribute('data-lucide', 'arrow-left');
+            } else {
+                descEl.classList.add('line-clamp-3');
+                textEl.textContent = 'Đọc tiếp';
+                iconEl.setAttribute('data-lucide', 'arrow-right');
+            }
+            lucide.createIcons();
+        };
+
+        document.getElementById('loadMoreBlogBtn').addEventListener('click', () => {
+            blogDisplayed += 6;
+            renderBlog();
+        });
+
+
+        // =========================================================================
+        // 2. DATA QUÁN ĂN (58 Quán)
+        // =========================================================================
+        const districts = [
+            { id: 'all', name: 'Tất cả' },
+            { id: 'cau-giay', name: 'Cầu Giấy' },
+            { id: 'nam-tu-liem', name: 'Nam Từ Liêm' },
+            { id: 'bac-tu-liem', name: 'Bắc Từ Liêm' },
+            { id: 'hoan-kiem', name: 'Hoàn Kiếm' },
+            { id: 'hai-ba-trung', name: 'Hai Bà Trưng' },
+            { id: 'hoang-mai', name: 'Hoàng Mai' },
+            { id: 'ba-dinh', name: 'Ba Đình' },
+            { id: 'long-bien', name: 'Long Biên' },
+            { id: 'thanh-xuan', name: 'Thanh Xuân' },
+            { id: 'dong-da', name: 'Đống Đa' },
+            { id: 'ha-dong', name: 'Hà Đông' },
+            { id: 'tay-ho', name: 'Tây Hồ' }
+        ];
+
+        const restaurantsData = [
+            // I. CẦU GIẤY (5 quán)
+            { district: 'cau-giay', name: 'Bún riêu cua tóp mỡ Chan Chan', address: '27 Tô Hiệu, Cầu Giấy', time: '7h30-14h, 17h30-22h', desc: 'Bún riêu cua màu đỏ cam hấp dẫn, vị chua nhẹ. Tô đầy đặn riêu cua béo mềm, tóp mỡ giòn rụm.', icon: '🍜', reviews: [
+                { name: 'Minh Tuấn', text: 'Tóp mỡ giòn siêu ngon, ăn mãi không ngấy. Nước dùng chua thanh rất vừa miệng.', avatar: 'https://i.pravatar.cc/150?img=11' },
+                { name: 'Thu Thảo', text: 'Quán rộng rãi, sạch গঠন. Riêu cua xịn ăn không bị bở. Chỗ để xe hơi chật vào giờ cao điểm.', avatar: 'https://i.pravatar.cc/150?img=10' },
+                { name: 'Hải Đăng', text: 'Giá cả hợp lý cho khu vực Cầu Giấy. Mình hay gọi thêm quẩy ăn bao no.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=HaiDang' }
+            ]},
+            { district: 'cau-giay', name: 'Bánh ép nhà Xoài', address: '219 Trần Đăng Ninh, Cầu Giấy', time: '11h-21h30', desc: 'Đậm hương vị bánh ép Huế, nóng giòn nhẹ bên ngoài, dẻo mềm bên trong.', icon: '🌮', reviews: [
+                { name: 'Linh Chi', text: 'Nước chấm ngon xuất sắc, bánh nóng hổi vừa thổi vừa ăn.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Quốc Bảo', text: 'Đúng chuẩn vị Huế luôn. Tré nướng và bánh ép tôm thịt là the best!', avatar: 'https://i.pravatar.cc/150?img=12' },
+                { name: 'Phương Anh', text: 'Quán decor xinh xắn, đồ ăn ra nhanh dù quán đông khách.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=PhuongAnh' }
+            ]},
+            { district: 'cau-giay', name: 'Mỳ chua cay', address: '20 Hoàng Quốc Việt, Cầu Giấy', time: '18h-3h sáng', desc: 'Nước dùng chua cay kích thích vị giác. Sợi mì dai mềm, topping đa dạng.', icon: '🍜', reviews: [
+                { name: 'Hùng Cường', text: 'Cứu đói đêm khuya tuyệt vời. Nước dùng cay xé lưỡi nhưng cực kỳ cuốn.', avatar: 'https://i.pravatar.cc/150?img=60' },
+                { name: 'Mai Lan', text: 'Topping siêu nhiều, mỳ xào hải sản chua cay ăn rất vừa miệng.', avatar: 'https://i.pravatar.cc/150?img=16' },
+                { name: 'Đức Huy', text: 'Mở đến 3h sáng nên anh em đi nhậu về ghé ăn là ấm bụng.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=DucHuy' }
+            ]},
+            { district: 'cau-giay', name: 'Xôi Ngọc', address: '1/259 Yên Hòa, Cầu Giấy', time: '5h30-14h', desc: 'Xôi xéo, xôi thịt, pate... Hạt xôi dẻo thơm ăn kèm topping béo ngậy.', icon: '🍚', reviews: [
+                { name: 'An An', text: 'Xôi xéo ở đây mỡ hành thơm nức mũi. Hạt xôi tơi dẻo không bị nát.', avatar: 'https://i.pravatar.cc/150?img=20' },
+                { name: 'Văn Tú', text: 'Pate nhà làm thơm béo ngậy, thịt kho tàu nhừ tơi. Ngày nào cũng ăn sáng ở đây.', avatar: 'https://i.pravatar.cc/150?img=14' },
+                { name: 'Hương Giang', text: 'Cô chủ nhiệt tình, xôi ú ụ mà có 25k. Rất đáng đồng tiền bát gạo.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=HuongGiang' }
+            ]},
+            { district: 'cau-giay', name: 'Xèo Xèo quán - gà nướng lu', address: '11/11/58 Dương Khuê, Cầu Giấy', time: '10h-22h', desc: 'Gà nướng lu thơm lừng, da vàng giòn, thịt mọng nước đậm đà.', icon: '🍗', reviews: [
+                { name: 'Bảo Trần', text: 'Gà nướng mật ong da giòn rụm. Thịt bên trong vẫn ẩm mọng không bị khô.', avatar: 'https://i.pravatar.cc/150?img=68' },
+                { name: 'Khánh Ly', text: 'Sốt me chấm gà đỉnh cao. Đi nhóm 4 người gọi 1 con là no căng.', avatar: 'https://i.pravatar.cc/150?img=1' },
+                { name: 'Nhật Nam', text: 'Quán nhậu sinh viên giá cả rất hợp lý. Không gian thoáng.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=NhatNam' }
+            ]},
+            
+            // II. NAM TỪ LIÊM (5 quán)
+            { district: 'nam-tu-liem', name: 'Nhà hàng bò 34', address: 'CTB2, Lê Đức Thọ, Mỹ Đình 2, Nam Từ Liêm', time: '6h-23h', desc: 'Chuyên các món từ bò, nướng lẩu đậm đà, thịt bò tươi mềm.', icon: '🥩', reviews: [
+                { name: 'Đức Phát', text: 'Thịt bò nướng tảng siêu mềm, tẩm ướp vừa vặn. Nhân viên nướng giúp tại bàn.', avatar: 'https://i.pravatar.cc/150?img=53' },
+                { name: 'Mỹ Linh', text: 'Không gian rộng rãi, có chỗ chơi cho trẻ em. Thích hợp đi ăn gia đình.', avatar: 'https://i.pravatar.cc/150?img=9' },
+                { name: 'Thanh Tùng', text: 'Lẩu bò nhúng dấm chua thanh, gầu bò giòn sần sật. Chắc chắn sẽ quay lại.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=ThanhTung' }
+            ]},
+            { district: 'nam-tu-liem', name: 'Bánh tráng cuốn thịt heo Hà Trần', address: '2 Đồng Me, Mễ Trì, Nam Từ Liêm', time: '9h-21h30', desc: 'Thịt heo luộc ngọt, rau sống tươi xanh, mắm nêm đậm đà.', icon: '🌯', reviews: [
+                { name: 'Mai Phương', text: 'Mắm nêm pha chuẩn vị Đà Nẵng, không bị mặn gắt. Thịt heo luộc tỉ lệ mỡ nạc vừa phải.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Quang Dũng', text: 'Rau sống sạch sẽ, xin thêm rau thoải mái cô chủ vẫn vui vẻ.', avatar: 'https://i.pravatar.cc/150?img=11' },
+                { name: 'Bích Ngọc', text: 'Nem lụi nướng sả rất thơm. Gọi 1 mẹt cuốn là 2 người ăn no kễnh.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=BichNgoc' }
+            ]},
+            { district: 'nam-tu-liem', name: 'Bún chả 27', address: '27/39 Đình Thôn, Nam Từ Liêm', time: '6h30-15h30, 17h-20h', desc: 'Chả nướng than hoa thơm lừng, thịt cháy xém cạnh hấp dẫn.', icon: '🥢', reviews: [
+                { name: 'Hải Yến', text: 'Chả băm rất mềm và không bị khô, nướng xém cạnh ăn cực kỳ đưa miệng.', avatar: 'https://i.pravatar.cc/150?img=10' },
+                { name: 'Hoàng Phong', text: 'Nước chấm pha rất vừa vặn, không bị ngọt quá như mấy hàng bún chả bây giờ.', avatar: 'https://i.pravatar.cc/150?img=12' },
+                { name: 'Minh Khang', text: 'Bún chả giá bình dân mà chất lượng tuyệt vời. Đồ chua giòn tan.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=MinhKhang' }
+            ]},
+            { district: 'nam-tu-liem', name: 'Huyền Lòng 62', address: '62 Đình Thôn, Nam Từ Liêm', time: '5h-16h', desc: 'Cháo lòng thơm ngon, lòng làm sạch sẽ giòn dai không hôi.', icon: '🥣', reviews: [
+                { name: 'Tuấn Phong', text: 'Cháo sánh mịn, lòng lợn luộc trắng giòn, dồi chiên cực đỉnh.', avatar: 'https://i.pravatar.cc/150?img=13' },
+                { name: 'Thanh Trúc', text: 'Lòng trần không hề bị hôi, chứng tỏ làm rất sạch. Mắm tôm pha ngon.', avatar: 'https://i.pravatar.cc/150?img=1' },
+                { name: 'Quốc Bảo', text: 'Sáng ra làm bát cháo lòng thêm bát tiết canh là ấm bụng đi làm.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=QuocBao' }
+            ]},
+            { district: 'nam-tu-liem', name: 'Chân gà A Phương', address: '22/56 Lê Quang Đạo, Nam Từ Liêm', time: '16h-22h', desc: 'Chân gà nướng mật ong thơm lừng, nước chấm mắm me chua ngọt.', icon: '🍗', reviews: [
+                { name: 'Ngọc Mai', text: 'Gây nghiện thực sự, nước chấm me thần thánh chấm bánh mỳ bao phê.', avatar: 'https://i.pravatar.cc/150?img=16' },
+                { name: 'Đức Huy', text: 'Chân gà nướng to mập, ướp đậm đà nướng xém xém ăn lai rai với bia tuyệt cú mèo.', avatar: 'https://i.pravatar.cc/150?img=14' },
+                { name: 'Lan Hương', text: 'Ngoài chân gà thì sườn sụn nướng cũng rất đáng thử nhé mọi người.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=LanHuong' }
+            ]},
+
+            // III. BẮC TỪ LIÊM (5 quán)
+            { district: 'bac-tu-liem', name: 'Phở bò Tư Hậu', address: '521 Thụy Phương, Bắc Từ Liêm', time: '5h30-10h30', desc: 'Nước dùng thanh trong, vị ngọt từ xương hầm, thịt bò tươi mềm.', icon: '🍜', reviews: [
+                { name: 'Thế Anh', text: 'Phở truyền thống ăn rất êm bụng. Nước dùng thanh không bị lợ vị mì chính.', avatar: 'https://i.pravatar.cc/150?img=15' },
+                { name: 'Cẩm Lệ', text: 'Bánh phở mềm dai, thịt lõi rùa giòn sần sật. Quán vỉa hè nhưng rất sạch sẽ.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Hùng Sơn', text: 'Điểm tâm sáng quen thuộc của người dân khu Thụy Phương. 8h sáng là hay hết thịt lõi.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=HungSon' }
+            ]},
+            { district: 'bac-tu-liem', name: 'Nhà Hàng Sáu Béo', address: '152/134 Cầu Diễn, Bắc Từ Liêm', time: '07h-00h', desc: 'Bia mát lạnh, thực đơn nhậu phong phú từ hải sản đến đồ nướng.', icon: '🍻', reviews: [
+                { name: 'Trọng Khang', text: 'Quán nhậu lý tưởng khu Cầu Diễn. Đồ ăn lên nhanh, bia hơi lạnh buốt.', avatar: 'https://i.pravatar.cc/150?img=33' },
+                { name: 'Tuyết Mai', text: 'Mồi nhậu phong phú, mình thích nhất món cá chép ôm dưa ở đây.', avatar: 'https://i.pravatar.cc/150?img=9' },
+                { name: 'Nhật Vượng', text: 'Chỗ để xe siêu rộng, phù hợp liên hoan công ty hoặc đi nhóm đông.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=NhatVuong' }
+            ]},
+            { district: 'bac-tu-liem', name: 'Lẩu Nấm Gia Khánh', address: '06-C11 Khu Embassy Garden, Bắc Từ Liêm', time: '10h20-22h', desc: 'Nước lẩu thanh ngọt từ nhiều loại nấm tự nhiên, nguyên liệu tươi.', icon: '🍲', reviews: [
+                { name: 'Diệu Nhi', text: 'Ăn thanh đạm, tốt cho sức khỏe. Nước lẩu nấm bồi bổ cơ thể rất tốt.', avatar: 'https://i.pravatar.cc/150?img=20' },
+                { name: 'Văn Tú', text: 'Nước lẩu thơm lừng, thịt bò ta nhúng kèm nấm kim châm ăn ngọt lịm.', avatar: 'https://i.pravatar.cc/150?img=11' },
+                { name: 'Hoài An', text: 'Không gian sang trọng, phục vụ chuyên nghiệp. Rất thích hợp mời khách.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=HoaiAn' }
+            ]},
+            { district: 'bac-tu-liem', name: 'Ốc Xứ Thanh', address: '127 Sông Nhuệ, Bắc Từ Liêm', time: '17h15-23h', desc: 'Ốc tươi giòn xào rang đậm đà phong vị miền Trung.', icon: '🐌', reviews: [
+                { name: 'Kim Oanh', text: 'Ốc xào me cay cay ngọt ngọt ngon lắm. Nước sốt quệt bánh mỳ tuyệt vời.', avatar: 'https://i.pravatar.cc/150?img=10' },
+                { name: 'Đình Bảo', text: 'Nhiều món ốc độc lạ chuẩn vị Thanh Hóa. Ốc hút xào sả ớt đỉnh cao.', avatar: 'https://i.pravatar.cc/150?img=12' },
+                { name: 'Bảo Trần', text: 'Giá cả sinh viên, cuối tuần hay tụ tập bạn bè ra đây chém gió.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=BaoTran' }
+            ]},
+            { district: 'bac-tu-liem', name: 'Chè bưởi Tư Đỉnh', address: '193/7 Phú Diễn, Bắc Từ Liêm', time: '9h-23h', desc: 'Cùi bưởi giòn sần sật không đắng, nước cốt dừa béo nhẹ.', icon: '🍧', reviews: [
+                { name: 'Thùy Trang', text: 'Chè không bị ngọt gắt, cùi bưởi làm rất khéo không hề bị he đắng.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Phạm Hùng', text: 'Chè bưởi thơm mùi cốt dừa, đậu xanh ninh nhừ tơi. Ngon!', avatar: 'https://i.pravatar.cc/150?img=13' },
+                { name: 'Thu Hằng', text: 'Quán chè chân ái tuổi sinh viên. Mùa hè làm cốc chè bưởi đá là tỉnh người.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=ThuHang' }
+            ]},
+
+            // IV. HOÀN KIẾM (5 quán)
+            { district: 'hoan-kiem', name: 'Phở bò Khôi hói', address: '50 Hàng Vải, Phố cổ, Hoàn Kiếm', time: '6h-21h', desc: 'Nước dùng đậm vị thơm mùi xương hầm bò. Thịt bò đầy đặn, bánh phở dai.', icon: '🍜', reviews: [
+                { name: 'Tú Anh', text: 'Nước dùng béo ngậy đúng kiểu phở lõi rùa Hà Nội cổ. Rất đáng thử!', avatar: 'https://i.pravatar.cc/150?img=1' },
+                { name: 'David Smith', text: 'Best pho in the Old Quarter! Highly recommended by local friends.', avatar: 'https://i.pravatar.cc/150?img=68' },
+                { name: 'Hải Nam', text: 'Sáng cuối tuần nào cũng lóc cóc lên phố cổ ăn bát phở lõi gầu giòn ở đây.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=HaiNam' }
+            ]},
+            { district: 'hoan-kiem', name: 'Huyền Vi - Sữa chua thạch', address: '5B Đinh Liệt, Hàng Đào, Hoàn Kiếm', time: '8h-21h', desc: 'Sữa chua chua ngọt kết hợp thạch lá nếp thơm dịu dẻo mềm.', icon: '🥤', reviews: [
+                { name: 'Khánh Ly', text: 'Giải nhiệt mùa hè số 1 phố cổ. Sữa chua mềm mịn, thạch xắt miếng to.', avatar: 'https://i.pravatar.cc/150?img=9' },
+                { name: 'Nhật Nam', text: 'Thạch lá nếp thơm mùi dứa, kết hợp sữa chua trân châu cốt dừa ăn hoài không chán.', avatar: 'https://i.pravatar.cc/150?img=11' },
+                { name: 'Lan Anh', text: 'Đi bộ quanh Bờ Hồ mỏi chân ghé vào làm ly sữa chua thạch là hết sẩy.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=LanAnh' }
+            ]},
+            { district: 'hoan-kiem', name: 'Bún mọc Thủy', address: '10 ngõ Đào Duy Từ, Hoàn Kiếm', time: '7h-13h30', desc: 'Viên mọc dai giòn thơm thịt, nước dùng trong vắt thanh khiết.', icon: '🥣', reviews: [
+                { name: 'Lê Dũng', text: 'Mọc sụn nhai sần sật đã miệng. Nước dùng ninh từ xương thịt lợn ngọt thanh.', avatar: 'https://i.pravatar.cc/150?img=12' },
+                { name: 'Hương Ly', text: 'Quán nằm trong ngõ nhỏ phố Đào Duy Từ nhưng lúc nào cũng đông khách.', avatar: 'https://i.pravatar.cc/150?img=10' },
+                { name: 'Tuấn Đạt', text: 'Mình cực thích măng khô ở đây, giòn và ngấm vị.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=TuanDat' }
+            ]},
+            { district: 'hoan-kiem', name: 'Chả cá Thăng Long', address: '6B Đường Thành, Hoàn Kiếm', time: '9h-23h', desc: 'Chả cá tẩm ướp đậm đà chiên vàng xào trên chảo gang với thì là.', icon: '🐟', reviews: [
+                { name: 'Cẩm Tú', text: 'Ăn kèm mắm tôm ngon nhức nách. Không gian sang trọng, phục vụ chu đáo.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Quang Khải', text: 'Chả cá lăng mềm ngọt, chiên xém cạnh ăn với bún và hành chẻ xuất sắc.', avatar: 'https://i.pravatar.cc/150?img=14' },
+                { name: 'Hoàng Phong', text: 'Một trong những quán chả cá đáng ăn nhất Hà Nội. Dẫn khách du lịch đến đây là chuẩn.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Phong' }
+            ]},
+            { district: 'hoan-kiem', name: 'Cháo sườn sụn Huyền Anh', address: '14 Đồng Xuân, Hoàn Kiếm', time: '10h-15h', desc: 'Cháo sánh mịn ngọt thanh, sườn sụn sần sật ăn kèm quẩy giòn.', icon: '🥣', reviews: [
+                { name: 'Thanh Trúc', text: 'Bát cháo tuổi thơ. Cháo xay nhuyễn mịn màng như lụa, sườn sụn ninh nhừ.', avatar: 'https://i.pravatar.cc/150?img=20' },
+                { name: 'Hùng Sơn', text: 'Cháo quẩy ruốc ở đây là huyền thoại chợ Đồng Xuân rồi. Mùa đông ăn cực ấm bụng.', avatar: 'https://i.pravatar.cc/150?img=53' },
+                { name: 'Thùy Linh', text: 'Cháo xay bột gạo tẻ đúng kiểu miền Bắc truyền thống. Đậm đà vị xương.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=ThuyLinh' }
+            ]},
+
+            // V. HAI BÀ TRƯNG (5 quán)
+            { district: 'hai-ba-trung', name: 'Bún ốc Hà Thành', address: '3 Phù Đổng Thiên Vương, Hai Bà Trưng', time: '7h-19h', desc: 'Nước dùng chua thanh thơm dấm bỗng, ốc giòn dai dân dã.', icon: '🐌', reviews: [
+                { name: 'Quỳnh Anh', text: 'Ốc to nhồi thịt siêu ngon. Nước bún ốc chua thanh chuẩn vị dấm bỗng.', avatar: 'https://i.pravatar.cc/150?img=1' },
+                { name: 'Đức Huy', text: 'Bún ốc nguội ở đây cũng rất tuyệt. Ốc giòn, nước chấm mắm gừng vừa miệng.', avatar: 'https://i.pravatar.cc/150?img=11' },
+                { name: 'Kim Dung', text: 'Đúng chuẩn bún ốc cổ truyền Hà Nội. Không cho thêm linh tinh đậu bò giò tai.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=KimDung' }
+            ]},
+            { district: 'hai-ba-trung', name: 'Cà Phê Thái', address: '27 Triệu Việt Vương, Hai Bà Trưng', time: '6h30-22h', desc: 'Cà phê gia truyền từ 1926. Đậm đà thơm nồng đúng vị truyền thống.', icon: '☕', reviews: [
+                { name: 'Đình Bảo', text: 'Vị cà phê rang xay cổ truyền đậm chất Hà Nội. Ngồi vỉa hè ngắm phố xá cực chill.', avatar: 'https://i.pravatar.cc/150?img=12' },
+                { name: 'Bích Ngọc', text: 'Không gian hoài cổ, cà phê nâu đá siêu đỉnh, tỉnh ngủ cả ngày.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Thanh Tùng', text: 'Quán lâu đời trên con phố cà phê sầm uất. Mình uống ở đây từ thời sinh viên.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ThanhTung' }
+            ]},
+            { district: 'hai-ba-trung', name: 'Cơm 123', address: '55 phố Huế, Hai Bà Trưng', time: '10h-21h', desc: 'Cơm bình dân đa dạng món gia đình chế biến đậm đà.', icon: '🍱', reviews: [
+                { name: 'Thanh Hằng', text: 'Bữa trưa văn phòng nhanh gọn lẹ. Cơm tấm sườn bì nướng rất ngon.', avatar: 'https://i.pravatar.cc/150?img=9' },
+                { name: 'Quốc Bảo', text: 'Đồ ăn đa dạng, giá cả hợp lý so với mặt bằng chung trên phố Huế.', avatar: 'https://i.pravatar.cc/150?img=14' },
+                { name: 'Mai Phương', text: 'Phục vụ nhanh, cơm mang ra luôn nóng hổi. Rất ưng ý.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=MaiPhuong' }
+            ]},
+            { district: 'hai-ba-trung', name: 'Cháo trai cô Hằng', address: '26 Trần Xuân Soạn, Hai Bà Trưng', time: '15h-21h', desc: 'Cháo nhuyễn mịn, ngọt tự nhiên từ trai. Thịt trai dai thơm.', icon: '🥣', reviews: [
+                { name: 'Hoài Nam', text: 'Cháo chiều lót dạ tuyệt vời. Cháo xay mịn béo ngậy.', avatar: 'https://i.pravatar.cc/150?img=15' },
+                { name: 'Hương Ly', text: 'Cháo quẩy trai thêm tí tiêu ớt là ấm bụng ngay mùa đông.', avatar: 'https://i.pravatar.cc/150?img=10' },
+                { name: 'Trọng Khang', text: 'Thịt trai xào đậm đà, không bị dai quá. Rất dễ ăn.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Khang' }
+            ]},
+            { district: 'hai-ba-trung', name: 'Tiệm bánh Hoan', address: '46 Trần Xuân Soạn, Hai Bà Trưng', time: '6h-21h', desc: 'Bánh mì pate lâu đời. Vỏ giòn, nhân truyền thống giữ nguyên hương vị.', icon: '🥖', reviews: [
+                { name: 'Bảo Trần', text: 'Pate béo ngậy ăn không biết chán. Bánh mì nướng giòn rụm.', avatar: 'https://i.pravatar.cc/150?img=33' },
+                { name: 'Tuyết Mai', text: 'Bánh mì chảo ở đây cũng rất đáng thử. Sốt vang thịt mềm tơi.', avatar: 'https://i.pravatar.cc/150?img=16' },
+                { name: 'Nhật Nam', text: 'Hương vị tuổi thơ không hề thay đổi. Giá cả vẫn rất phải chăng.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=NhatNam' }
+            ]},
+
+            // VI. HOÀNG MAI (5 quán)
+            { district: 'hoang-mai', name: 'Mì vằn thắn Thành Vy', address: '157A Trương Định, Hoàng Mai', time: '5h30-14h, 17h-21h', desc: 'Nước dùng trong ngọt thanh, sợi mì dai mềm, hoành thánh và xá xíu đầy đặn.', icon: '🍜', reviews: [
+                { name: 'Lê Dũng', text: 'Sủi cảo tôm thịt mềm tan trong miệng. Bát mì thập cẩm có cả trứng cút luộc.', avatar: 'https://i.pravatar.cc/150?img=60' },
+                { name: 'Lan Hương', text: 'Nước dùng ngọt thanh từ xương, không bị lợ vị mì chính. Ăn xong không bị khô cổ.', avatar: 'https://i.pravatar.cc/150?img=10' },
+                { name: 'Minh Tuấn', text: 'Mì tươi dai giòn. Quán sạch sẽ, phục vụ chu đáo dù rất đông.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=MinhTuan' }
+            ]},
+            { district: 'hoang-mai', name: 'Lòng Ngon Hợp Lý', address: '24 Trần Nguyên Đán, Hoàng Mai', time: '6h30-22h', desc: 'Chuyên lòng luộc, dồi, dạ dày làm sạch sẽ, đậm vị.', icon: '🥢', reviews: [
+                { name: 'Đức Huy', text: 'Dồi sụn nướng ở đây siêu đỉnh. Thơm lừng mùi rau húng.', avatar: 'https://i.pravatar.cc/150?img=11' },
+                { name: 'Mai Linh', text: 'Lòng luộc trắng giòn sần sật, mắm tôm đánh sủi bọt pha rất ngon.', avatar: 'https://i.pravatar.cc/150?img=1' },
+                { name: 'Hải Đăng', text: 'Lẩu cháo lòng bao no bao ngon. Anh em Hoàng Mai nên thử.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=HaiDang' }
+            ]},
+            { district: 'hoang-mai', name: 'Bông ốc Hải Phòng', address: '71 vành đai 2.5 Định Công, Hoàng Mai', time: 'Cả ngày', desc: 'Ốc tươi xào sả ớt đậm đà phong vị đất Cảng.', icon: '🐌', reviews: [
+                { name: 'Hà Phương', text: 'Hương vị cay nồng chuẩn Hải Phòng. Ốc hương sốt trứng muối đỉnh cao.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Tuấn Đạt', text: 'Càng cúng rang muối ớt siêu cay siêu ngon. Nhậu tới bến.', avatar: 'https://i.pravatar.cc/150?img=12' },
+                { name: 'Cẩm Tú', text: 'Không gian vỉa hè thoáng mát, giá rẻ hơn phố cổ nhiều.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=CamTu' }
+            ]},
+            { district: 'hoang-mai', name: 'Lẩu riêu Thanh Vũ', address: 'ô 11 lô TT 6C Tây Nam Linh Đàm, Hoàng Mai', time: '10h-22h', desc: 'Lẩu riêu cua chua thanh nhẹ, đồ nhúng thịt bò đậu bún phong phú.', icon: '🍲', reviews: [
+                { name: 'Thành Long', text: 'Nước lẩu thơm mùi dấm bỗng rất cuốn. Gạch cua xào hành phi béo ngậy.', avatar: 'https://i.pravatar.cc/150?img=13' },
+                { name: 'Thùy Linh', text: 'Đồ nhúng lẩu tươi ngon, không gian rộng rãi có chỗ đỗ ô tô.', avatar: 'https://i.pravatar.cc/150?img=9' },
+                { name: 'Quốc Bảo', text: 'Thịt bò bắp thái mỏng nhúng qua nước lẩu riêu cua là hết sẩy.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Bao' }
+            ]},
+            { district: 'hoang-mai', name: 'Cô Đan - sữa chua & caramen', address: '6 Ngõ Gốc Đề, Hoàng Mai', time: 'Sau 7h tối', desc: 'Sữa chua mịn, caramen béo thơm ăn kèm thạch trân châu.', icon: '🍮', reviews: [
+                { name: 'Hương Ly', text: 'Caramen cốt dừa núng nính cực ngon. Trân châu tự làm dẻo dai.', avatar: 'https://i.pravatar.cc/150?img=20' },
+                { name: 'Văn Tú', text: 'Giá rẻ, đồ ăn vặt buổi tối lý tưởng cho học sinh sinh viên.', avatar: 'https://i.pravatar.cc/150?img=14' },
+                { name: 'Nhật Nam', text: 'Mở muộn nên hay rủ bạn bè ra ăn đêm. Sữa chua nếp cẩm ngon.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Nam' }
+            ]},
+
+            // VII. BA ĐÌNH (5 quán)
+            { district: 'ba-dinh', name: 'Bún cá Văn', address: '147 Quán Thánh, Ba Đình', time: '6:00 - 15:00', desc: 'Từng xuất hiện trên CNN. Cá to dày miếng, tôm ngọt, nước dùng chua ngọt thanh.', icon: '🐟', reviews: [
+                { name: 'David Lee', text: 'Amazing fish noodle soup! The broth is so flavorful and the fish is crispy.', avatar: 'https://i.pravatar.cc/150?img=68' },
+                { name: 'Diệu Nhi', text: 'Cá rán giòn tan, nước dùng chua thanh vị cà chua dứa. Quán ruột của mình.', avatar: 'https://i.pravatar.cc/150?img=1' },
+                { name: 'Hoàng Phong', text: 'Có thêm topping tôm xào và chả cá cực ngon. Giá nhỉnh hơn chỗ khác nhưng đáng tiền.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Phong' }
+            ]},
+            { district: 'ba-dinh', name: 'Phở Thế Béo', address: '16 Trần Tế Xương, Trúc Bạch, Ba Đình', time: '5:00 - 14:00', desc: 'Phở nạm sốt vang và phở lõi rùa trứ danh. Nước dùng trong, sợi phở mềm ướt.', icon: '🍜', reviews: [
+                { name: 'Minh Khang', text: 'Phở lõi bò siêu giòn và ngọt. Lần nào lên Hà Nội cũng phải ghé ăn.', avatar: 'https://i.pravatar.cc/150?img=11' },
+                { name: 'Bích Ngọc', text: 'Phở sốt vang đậm đà, thịt bò gân dẻo ngon. Nước phở màu đẹp.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Tuấn Đạt', text: 'Sợi phở mềm mướt, cho thêm tí tương ớt tự làm của quán là chuẩn bài.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Dat' }
+            ]},
+            { district: 'ba-dinh', name: 'Bún ốc bà Thoa', address: 'Ngõ 7 Liễu Giai, Cống Vị, Ba Đình', time: '7:00 - 19:00', desc: 'Nước dùng trong thơm, không pha riêu cua, giữ trọn vị ốc tinh túy.', icon: '🐌', reviews: [
+                { name: 'Cẩm Tú', text: 'Ốc nhồi to chà bá, cắn ngập răng. Nước dùng thanh không bị nồng.', avatar: 'https://i.pravatar.cc/150?img=10' },
+                { name: 'Thanh Tùng', text: 'Bún ốc nguội ăn giải nhiệt mùa hè siêu đã. Ốc giòn sần sật.', avatar: 'https://i.pravatar.cc/150?img=15' },
+                { name: 'Lan Anh', text: 'Mình cực thích mắm tôm ở đây, đánh sủi bọt chấm ốc luộc cũng ngon.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=LanAnh' }
+            ]},
+            { district: 'ba-dinh', name: 'Lò Bánh Bao', address: 'Số 5 Ngõ Tôn Thất Thiệp, Ba Đình', time: '5:30 - 19:00', desc: 'Gia truyền 25 năm. Vỏ thủ công xốp, nhân mộc nhĩ đậm đà trứng cút trứng muối.', icon: '🥟', reviews: [
+                { name: 'Quốc Bảo', text: 'Bánh bao trứng muối tan chảy béo ngậy. Mua 5 cái về ăn dần vẫn ngon.', avatar: 'https://i.pravatar.cc/150?img=12' },
+                { name: 'Mai Phương', text: 'Vỏ bánh mềm xốp, có mùi men chua nhẹ đặc trưng làm thủ công.', avatar: 'https://i.pravatar.cc/150?img=9' },
+                { name: 'Hải Nam', text: 'Quán trong ngõ hơi khó tìm nhưng bánh bao nhân thịt xá xíu cực phẩm.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Nam' }
+            ]},
+            { district: 'ba-dinh', name: 'Ốc Tùng Hói', address: '14 Tôn Thất Thiệp, Ba Đình', time: '15:00 - 20:00', desc: 'Ốc luộc truyền thống siêu tươi, xoài dầm khoai tây chiên ngon xuất sắc.', icon: '🐌', reviews: [
+                { name: 'Thu Hằng', text: 'Khoai tây chiên bơ tỏi ở đây là chân ái. Ốc luộc mập mạp.', avatar: 'https://i.pravatar.cc/150?img=16' },
+                { name: 'Trọng Khang', text: 'Ốc luộc mắm gừng sả ớt ngon nhức nách. Phục vụ siêu nhanh.', avatar: 'https://i.pravatar.cc/150?img=14' },
+                { name: 'Hương Giang', text: 'Xoài dầm chua ngọt ăn chống ngấy rất tốt. Ăn vỉa hè gió mát.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Giang' }
+            ]},
+
+            // VIII. LONG BIÊN (5 quán)
+            { district: 'long-bien', name: 'Bún Dính', address: '26 P. Lâm Hạ, Bồ Đề, Long Biên', time: '5:45 - 13:00', desc: 'Bát bún viên mọc to chắc thịt, sườn sụn hầm mềm, lưỡi heo dày miếng chấm xì dầu.', icon: '🥣', reviews: [
+                { name: 'Hùng Sơn', text: 'Chấm thịt lưỡi với xì dầu tiêu xanh bao phê. Mọc giòn sần sật.', avatar: 'https://i.pravatar.cc/150?img=53' },
+                { name: 'Khánh Ly', text: 'Bún mọc dọc mùng nước dùng trong vắt thanh ngọt. Không gian sân vườn.', avatar: 'https://i.pravatar.cc/150?img=1' },
+                { name: 'Minh Tuấn', text: 'Phải đi ăn sớm vì 9h là quán hay hết những món ngon rồi.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Tuan' }
+            ]},
+            { district: 'long-bien', name: 'Bánh cuốn Phủ Lý', address: '149 Hoàng Như Tiếp, Long Biên', time: '7:00 - 14:00', desc: 'Chuẩn vị Hà Nam. Bánh mướt không nhân, thịt nướng than hoa tẩm ướp đậm đà.', icon: '🌮', reviews: [
+                { name: 'Mai Phương', text: 'Hành phi tự làm giòn rụm không bị khét. Nước mắm chua ngọt ấm.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Đức Huy', text: 'Bánh cuốn tráng tay mỏng mướt, chả nướng thơm lừng vị than hoa.', avatar: 'https://i.pravatar.cc/150?img=11' },
+                { name: 'Tuấn Phong', text: 'Chuẩn bánh cuốn Hà Nam. Ăn 1 suất là no bụng đến trưa.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Phong' }
+            ]},
+            { district: 'long-bien', name: 'Vịt cỏ Thành Luân', address: '23 Ng. 2 Phú Viên, Long Biên', time: '9:00 - 23:15', desc: 'Vịt chắc thịt thơm béo. Vịt nướng da giòn rụm, giá bình dân.', icon: '🦆', reviews: [
+                { name: 'Đức Phát', text: 'Nước chấm vịt nướng chua cay mặn ngọt chuẩn luôn. Thịt vịt ngọt.', avatar: 'https://i.pravatar.cc/150?img=33' },
+                { name: 'Thanh Trúc', text: 'Lẩu vịt om sấu ăn kèm rau nhút chua chua thanh thanh rất hợp mùa hè.', avatar: 'https://i.pravatar.cc/150?img=10' },
+                { name: 'Hoàng Lâm', text: 'Giá cả bình dân, quán rộng rãi thoáng mát. Ngồi nhậu rất vào.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Lam' }
+            ]},
+            { district: 'long-bien', name: 'Phở Chiến Gà', address: '8 P. Lệ Mật, Long Biên', time: '6:00 - 22:00', desc: 'Gà ta da giòn sần sật, nước dùng hầm xương thanh ngọt thơm mùi gừng hành.', icon: '🍜', reviews: [
+                { name: 'Hồng Hạnh', text: 'Thịt đùi gà giòn sần sật cực phẩm. Da gà vàng óng không mỡ.', avatar: 'https://i.pravatar.cc/150?img=9' },
+                { name: 'Thành Long', text: 'Phở gà trộn sốt chua ngọt lạ miệng. Bát phở nước thanh ngọt.', avatar: 'https://i.pravatar.cc/150?img=12' },
+                { name: 'Nhật Nam', text: 'Gà chặt bày đĩa nhìn hấp dẫn. Không gian quán sạchẽ.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=NhatNam' }
+            ]},
+            { district: 'long-bien', name: 'Tiệm bánh mì U Vân', address: '175 Đ. Ngọc Lâm, Long Biên', time: 'Mở cả ngày', desc: 'Vỏ nướng giòn rụm, nhân xá xíu pate béo ngậy. Có xôi thịt kho đậm đà.', icon: '🥖', reviews: [
+                { name: 'Khánh Toàn', text: 'Pate u Vân làm mềm và thơm nức. Cắn miếng bánh mì giòn tan.', avatar: 'https://i.pravatar.cc/150?img=15' },
+                { name: 'Hoài Giang', text: 'Bánh mì thập cẩm full topping ăn bao no. Cô bán hàng xởi lởi.', avatar: 'https://i.pravatar.cc/150?img=20' },
+                { name: 'Lê Dũng', text: 'Xôi pate thịt kho trứng ngon vô địch. Giá học sinh sinh viên.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=LeDung' }
+            ]},
+
+            // IX. THANH XUÂN (5 quán)
+            { district: 'thanh-xuan', name: 'Phở bò Dũng', address: '232 P. Quan Nhân, Thanh Xuân', time: '5:00 - 21:00', desc: 'Thanh ngọt dậy mùi thơm gừng băm, thịt tái chín gầu thái vừa vặn.', icon: '🍜', reviews: [
+                { name: 'Văn Tú', text: 'Hương vị phở cổ truyền không pha tạp. Gừng băm làm phở dậy mùi.', avatar: 'https://i.pravatar.cc/150?img=14' },
+                { name: 'Bảo Trần', text: 'Nước dùng phở bò Dũng ăn xong không bị khát nước. Rất ưng.', avatar: 'https://i.pravatar.cc/150?img=60' },
+                { name: 'Tuyết Mai', text: 'Thịt bò gầu giòn, bát phở đầy đặn. Quán nhỏ nhưng tấp nập.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=TuyetMai' }
+            ]},
+            { district: 'thanh-xuan', name: 'Bún đậu mẹt cô Chinh', address: '132/5 Đ. Nguyễn Trãi, Thanh Xuân', time: '10:00 - 21:00', desc: 'Mẹt bún siêu đầy đặn, đậu vàng giòn ngoài mềm trong, dồi sụn sần sật.', icon: '🥢', reviews: [
+                { name: 'Lan Anh', text: 'Đậu rán phồng giòn rụm, mắm tôm không bị mặn gắt. Đánh chanh sủi bọt tưng bừng.', avatar: 'https://i.pravatar.cc/150?img=1' },
+                { name: 'Hoàng Phong', text: 'Dồi sụn chiên thái miếng dày cắn ngập miệng. Ăn 1 mẹt no lặc lè.', avatar: 'https://i.pravatar.cc/150?img=11' },
+                { name: 'Cẩm Lệ', text: 'Chả cốm dẻo thơm, thịt chân giò thái mỏng mỡ màng. Quán sinh viên giá rẻ.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=CamLe' }
+            ]},
+            { district: 'thanh-xuan', name: 'Mr. Lòng', address: 'Số 43, Ngõ 21 Lê Văn Lương, Thanh Xuân', time: '10:00 - 14:00', desc: 'Lòng trần nóng hổi chấm mắm tôm đánh chanh ớt trong không gian Hà Nội xưa.', icon: '🥘', reviews: [
+                { name: 'Bảo Cường', text: 'Quán siêu sạch sẽ, lòng trắng giòn. Ăn không lo đau bụng.', avatar: 'https://i.pravatar.cc/150?img=13' },
+                { name: 'Diễm Hương', text: 'Lòng dồi nướng than hoa thơm lừng. Phục vụ chuyên nghiệp lịch sự.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Hải Nam', text: 'Bát cháo lòng tiết canh chuẩn vị. Không gian decor kiểu xưa rất đẹp.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=HaiNam' }
+            ]},
+            { district: 'thanh-xuan', name: 'Cơm Tấm Đêe', address: '199 P. Vũ Tông Phan, Thanh Xuân', time: '10:30-14:00, 17:30-21:00', desc: 'Sườn nướng tẩm ướp khéo mềm mọng. Nước mắm kẹo ngọt cay chuẩn Sài Gòn.', icon: '🍚', reviews: [
+                { name: 'Ngọc Lan', text: 'Sườn cốt lết dày cộp nướng cháy xém ngon lắm. Nước mắm kẹo đặc sệt.', avatar: 'https://i.pravatar.cc/150?img=10' },
+                { name: 'Đức Huy', text: 'Cơm tấm dẻo tơi, chả trứng hấp mềm mịn. Đồ chua làm ăn rất bắt cơm.', avatar: 'https://i.pravatar.cc/150?img=12' },
+                { name: 'Mai Phương', text: 'Cơm tấm chuẩn vị Sài Gòn. Tầng 2 có điều hòa mát mẻ.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=MaiPhuong' }
+            ]},
+            { district: 'thanh-xuan', name: 'Bếp Mẹ Đăng', address: '38 P. Nhân Hòa, Thanh Xuân', time: '11:00 - 22:30', desc: 'Thiên đường ốc và chân gà rút xương, nước chấm pha chuẩn vị Bắc.', icon: '🐌', reviews: [
+                { name: 'Thùy Linh', text: 'Chân gà sả tắc ngâm vừa miệng, giòn tan. Mắm quất chua cay ngon tuyệt.', avatar: 'https://i.pravatar.cc/150?img=16' },
+                { name: 'Thu Thảo', text: 'Ốc hương xào me chua chua ngọt ngọt mút ngón tay luôn.', avatar: 'https://i.pravatar.cc/150?img=9' },
+                { name: 'Trọng Khang', text: 'Ốc bươu nướng tiêu xanh cay nồng. Nhậu lai rai buổi tối hết sẩy.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Khang' }
+            ]},
+
+            // X. ĐỐNG ĐA (5 quán)
+            { district: 'dong-da', name: 'Mì Chinh', address: '7 Ng. Hàng Cháo, Đống Đa', time: '7:00 - 12:00', desc: 'Topping tim cật tươi rói giòn ngọt, mỳ xào giòn sốt đậm đà.', icon: '🍜', reviews: [
+                { name: 'Phú Trọng', text: 'Mỳ xào tim cật sốt nấm xuất sắc. Cật làm sạch không hề hôi.', avatar: 'https://i.pravatar.cc/150?img=15' },
+                { name: 'Cẩm Tú', text: 'Mì xào giòn rụm, sốt sánh quyện đậm đà. Ăn sáng là no đến trưa.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Lê Dũng', text: 'Quán trong ngõ rộng, để xe thoải mái. Mì nước cũng rất ngọt thanh.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Dung' }
+            ]},
+            { district: 'dong-da', name: 'Bánh Mì 35', address: '35 P. Thái Thịnh, Đống Đa', time: '6:30 - 21:30', desc: 'Bánh mì chảo truyền thống. Pate béo ngậy, sốt vang bò gân hầm mềm.', icon: '🍳', reviews: [
+                { name: 'Thanh Phương', text: 'Sốt vang đậm đà chấm bánh mì bao no. Bò gân hầm nhừ.', avatar: 'https://i.pravatar.cc/150?img=10' },
+                { name: 'Tuấn Đạt', text: 'Pate áp chảo xèo xèo thơm nức mũi. Trứng ốp lòng đào béo ngậy.', avatar: 'https://i.pravatar.cc/150?img=11' },
+                { name: 'Khánh Ly', text: 'Hương vị bao năm không đổi. Mình ăn từ bé đến lớn.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=KhánhLy' }
+            ]},
+            { district: 'dong-da', name: 'Chả cá Lão Ngư', address: '171 P. Thái Hà, Đống Đa', time: '10:00 - 22:30', desc: 'Cá Lăng tươi chiên chảo gang, lòng cá giòn sần sật. Cháo cá tào phớ miễn phí.', icon: '🐟', reviews: [
+                { name: 'Hoài Giang', text: 'Thịt cá lăng mềm ngọt không bị bở. Lòng cá giòn dai nhai sướng miệng.', avatar: 'https://i.pravatar.cc/150?img=20' },
+                { name: 'Lan Hương', text: 'Mắm tôm pha vừa miệng, không bị nặng mùi. Rau thì là xanh mướt.', avatar: 'https://i.pravatar.cc/150?img=1' },
+                { name: 'Nhật Nam', text: 'Cuối bữa có cháo cá và tào phớ ăn tráng miệng free cực kì chu đáo.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Nam' }
+            ]},
+            { district: 'dong-da', name: 'Bánh đúc nóng Trung Tự', address: '103B5 ngõ 46C Phạm Ngọc Thạch, Đống Đa', time: '10:00 - 20:00', desc: 'Bột bánh mịn mượt lụa là, thịt băm hành phi vàng ruộm, nước mắm thanh.', icon: '🥣', reviews: [
+                { name: 'Tuyết Mai', text: 'Bánh đúc tuổi thơ, ăn là nhớ. Bột bánh núng nính, mắm mặn ngọt chan hòa.', avatar: 'https://i.pravatar.cc/150?img=9' },
+                { name: 'Quang Dũng', text: 'Thêm tí ớt chưng vào bánh đúc nóng ăn cay cay ấm bụng chiều đông.', avatar: 'https://i.pravatar.cc/150?img=12' },
+                { name: 'Bảo Trần', text: 'Thịt băm xào mộc nhĩ nhiều ú ụ. Ăn 2 bát mới đã cơn thèm.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=BaoTran' }
+            ]},
+            { district: 'dong-da', name: 'Phở Hiếu', address: '79 Ng.Thổ Quan, Đống Đa', time: '19:00 - 3:00', desc: 'Cứu đói đêm khuya. Phở sốt vang đầy đặn thơm mùi quế hồi.', icon: '🍜', reviews: [
+                { name: 'Tuấn Anh', text: 'Bát phở 30k mà ú ụ thịt. Ăn đêm Khâm Thiên thì nhất định phải ghé.', avatar: 'https://i.pravatar.cc/150?img=33' },
+                { name: 'Bích Ngọc', text: 'Nước dùng đậm đà sực mùi hoa hồi quế. Quẩy giòn chấm nước sốt vang ngon.', avatar: 'https://i.pravatar.cc/150?img=16' },
+                { name: 'Thành Long', text: 'Phở trộn gà ở đây cũng ngon không kém. Bán đến mờ sáng.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=ThanhLong' }
+            ]},
+
+            // XI. HÀ ĐÔNG (3 quán)
+            { district: 'ha-dong', name: 'Nét Cuốn', address: '30 P. Nguyễn Văn Lộc, Hà Đông', time: '10:00-14:00, 17:00-22:00', desc: 'Cuốn thanh đạm, rau sống đa dạng. Nem lụi, phở cuốn tươi ngon đậm đà.', icon: '🌯', reviews: [
+                { name: 'Diễm Hương', text: 'Rau sạch, không gian thoáng mát. Bánh tráng cuốn thịt heo rất dễ ăn.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Thanh Hằng', text: 'Nem lụi nướng sả thơm lừng, chấm tương đậu bùi bùi ngon tuyệt.', avatar: 'https://i.pravatar.cc/150?img=10' },
+                { name: 'Minh Tuấn', text: 'Quán sạch sẽ, điều hòa mát rượi. Đổi gió bữa trưa văn phòng rất hợp.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Tuan' }
+            ]},
+            { district: 'ha-dong', name: 'Kem dừa Mã Lai Tea & Coffee', address: 'LK25 P. Lê Lai, Hà Đông', time: 'Cả ngày', desc: 'Kem dừa dẻo mịn ngọt thanh trong gáo dừa kèm dừa nạo và lạc rang.', icon: '🥥', reviews: [
+                { name: 'Quốc Huy', text: 'Kem béo ngậy mà không ngọt gắt. Ăn trong gáo dừa kèm xôi rất xịn.', avatar: 'https://i.pravatar.cc/150?img=13' },
+                { name: 'Mai Phương', text: 'Nước dừa tươi ngọt mát uống kèm kem dừa rất hợp. View quán đẹp.', avatar: 'https://i.pravatar.cc/150?img=1' },
+                { name: 'Hương Ly', text: 'Bít tết chảo gang ở đây cũng rất đáng thử. Giá sinh viên cực kì.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Ly' }
+            ]},
+            { district: 'ha-dong', name: 'Phở gà Hương', address: '430 Đường Vạn Phúc, Hà Đông', time: 'Sáng và trưa', desc: 'Nước dùng trong vắt thanh ngọt, gà ta chắc thịt da vàng sần sật.', icon: '🍜', reviews: [
+                { name: 'Hồng Nhung', text: 'Phở mọc gà giòn ngon. Nước dùng thanh ngọt mùi xương gà.', avatar: 'https://i.pravatar.cc/150?img=9' },
+                { name: 'Hùng Sơn', text: 'Quán đông nhưng phục vụ nhanh. Gà ta chuẩn thịt chắc, da giòn.', avatar: 'https://i.pravatar.cc/150?img=14' },
+                { name: 'Tuấn Đạt', text: 'Bát phở đầy đặn, thêm lá chanh thái sợi thơm nức mũi.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Dat' }
+            ]},
+
+            // XII. TÂY HỒ (5 quán)
+            { district: 'tay-ho', name: 'Bánh cuốn nóng Thụy Khuê', address: 'Ngõ 29, Thuỵ Khuê, Tây Hồ', time: '06:30–12:00', desc: 'Tráng tay mướt mịn thơm gạo, nước chấm thanh tao ăn kèm chả quế.', icon: '🌮', reviews: [
+                { name: 'Hoàng Phong', text: 'Bánh cuốn nấm mộc nhĩ siêu nhiều nhân. Bánh mỏng tang, mướt rượt.', avatar: 'https://i.pravatar.cc/150?img=33' },
+                { name: 'Thu Thảo', text: 'Nước chấm chả quế nóng hổi vừa thổi vừa ăn. Cô tráng bánh thoăn thoắt.', avatar: 'https://i.pravatar.cc/150?img=1' },
+                { name: 'Quang Dũng', text: 'Bánh cuốn trứng lòng đào béo ngậy. Chỗ ngồi vỉa hè ngõ nhỏ đậm chất Hà Nội.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Dung' }
+            ]},
+            { district: 'tay-ho', name: 'Quán bò nầm nướng cô Thảo', address: '74 Vũ Miên, Tây Hồ', time: 'Cả ngày', desc: 'Bò nầm tươi nướng bơ sốt me đậm đà, view Hồ Tây lãng mạn.', icon: '🥩', reviews: [
+                { name: 'Cẩm Lệ', text: 'Ngồi lề đường nướng thịt xèo xèo ngắm hoàng hôn hồ Tây cực chill.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                { name: 'Khánh Toàn', text: 'Sốt me chua ngọt chấm bánh mì nướng bơ ngon bá cháy. Nầm bò nướng giòn.', avatar: 'https://i.pravatar.cc/150?img=53' },
+                { name: 'Linh Trang', text: 'Gió hồ mát rượi, đồ ăn ướp đậm đà. Có điều cuối tuần phải đợi bàn hơi lâu.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Trang' }
+            ]},
+            { district: 'tay-ho', name: 'Bún chả Ngọc Xuân', address: '102 Đ. Thụy Khuê, Tây Hồ', time: '7:00 - 16:00', desc: 'Chả thái đều tay cháy cạnh thơm nức, chả băm tẩm ướp bí truyền.', icon: '🥢', reviews: [
+                { name: 'Hải Đăng', text: 'Quán sạch sẽ điều hòa mát rượi. Bún chả ngon, thịt nướng than hoa.', avatar: 'https://i.pravatar.cc/150?img=15' },
+                { name: 'Tiến Đạt', text: 'Nem cua bể vỏ giòn tan nhân thịt cua đầy đặn. Nước mắm pha thanh.', avatar: 'https://i.pravatar.cc/150?img=12' },
+                { name: 'Thanh Hằng', text: 'Chả miếng cháy cạnh ngấm gia vị. Giá hơi cao nhưng xứng đáng.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Hang' }
+            ]},
+            { district: 'tay-ho', name: 'Quán Kiến', address: '3/39 ngõ 76 An Dương, Tây Hồ', time: '10:00 - 22:30', desc: 'Nhà sàn Tây Bắc. Đặc sản xôi trứng kiến, bọ cạp chiên, thịt ngựa nướng.', icon: '🦂', reviews: [
+                { name: 'Trọng Khang', text: 'Rượu hoa quả ngâm rất êm, mồi nhậu bén. Bọ cạp chiên giòn ăn bùi bùi.', avatar: 'https://i.pravatar.cc/150?img=60' },
+                { name: 'Hải Nam', text: 'Các món côn trùng chiên giòn ăn thử rất lạ miệng. Gà nướng mắc khén ngon.', avatar: 'https://i.pravatar.cc/150?img=11' },
+                { name: 'Bích Ngọc', text: 'Không gian nhà sàn mát mẻ, xôi trứng kiến dẻo ngậy. Phục vụ chu đáo.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=BichNgoc' }
+            ]},
+            { district: 'tay-ho', name: 'Nhà Hàng Bánh Tôm Hồ Tây', address: 'Số 1 Thanh Niên, Tây Hồ', time: '9:00 - 21:00', desc: 'Bánh tôm giòn rụm tôm tươi rói, view lộng gió hoàng hôn Hồ Tây.', icon: '🦐', reviews: [
+                { name: 'Kim Dung', text: 'Tôm to thịt chắc cắn ngập miệng. Bột bánh giòn tan không bị ngấy mỡ.', avatar: 'https://i.pravatar.cc/150?img=10' },
+                { name: 'Ngọc Lan', text: 'Vừa ăn bánh tôm vừa ngắm hoàng hôn Hồ Tây lãng mạn. Quán sang trọng.', avatar: 'https://i.pravatar.cc/150?img=16' },
+                { name: 'Phạm Hùng', text: 'Món ăn truyền thống Hà Nội dắt khách phương xa đến là chuẩn bài.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Hung' }
+            ]}
+        ];
+
+        let currentlyDisplayed = 6;
+        let filteredData = [...restaurantsData];
+
+        function filterByDistrict(districtId, clickedBtn) {
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('active');
+                b.classList.add('text-gray-600');
+            });
+            clickedBtn.classList.add('active');
+            clickedBtn.classList.remove('text-gray-600');
+
+            if(districtId === 'all') {
+                filteredData = [...restaurantsData];
+            } else {
+                filteredData = restaurantsData.filter(r => r.district === districtId);
+            }
+            
+            currentlyDisplayed = Math.min(6, filteredData.length);
+            renderList();
+        }
+
+        function renderList() {
+            const container = document.getElementById('dynamic-restaurant-list');
+            container.innerHTML = ''; 
+
+            if(filteredData.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-10">Không tìm thấy quán ăn nào.</p>';
+                document.getElementById('loadMoreBtn').classList.add('hidden');
+                return;
+            }
+
+            for(let i=0; i < currentlyDisplayed; i++) {
+                const item = filteredData[i];
+                const mapQuery = encodeURIComponent(`${item.name}, ${item.address}, Hà Nội`);
+                const mapLink = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+                
+                let currentReviews = item.reviews;
+                if (!currentReviews || currentReviews.length < 3) {
+                    currentReviews = [
+                        { name: 'Nguyễn Nam', text: 'Quán ăn ngon, giá hợp lý, phục vụ nhanh nhẹn. Đáng để trải nghiệm.', avatar: 'https://i.pravatar.cc/150?img=11' },
+                        { name: 'Trần Mai', text: 'Hương vị đặc trưng truyền thống. Mình ăn ở đây từ rất lâu rồi, chất lượng không đổi.', avatar: 'https://i.pravatar.cc/150?img=5' },
+                        { name: 'Hoàng Lâm', text: 'Điểm trừ nhỏ là chỗ để xe hơi chật, nhưng bù lại đồ ăn rất xuất sắc.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Lam' }
+                    ];
+                }
+
+                const topReview = currentReviews[0];
+                const topReviewHTML = `
+                    <div class="flex gap-3 bg-white p-3 rounded-xl shadow-sm border border-gray-100">
+                        <img src="${topReview.avatar}" class="w-8 h-8 rounded-full border border-gray-200 bg-gray-100 object-cover">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-xs text-gray-900">${topReview.name}</span> 
+                                <span class="text-yellow-400 text-[10px]">★★★★★</span>
+                            </div>
+                            <p class="text-xs text-gray-600 mt-1 leading-relaxed">"${topReview.text}"</p>
+                        </div>
+                    </div>
+                `;
+
+                let extraReviewsHTML = '';
+                for (let j = 1; j < currentReviews.length; j++) {
+                    const r = currentReviews[j];
+                    extraReviewsHTML += `
+                        <div class="flex gap-3 bg-white p-3 rounded-xl shadow-sm border border-gray-100">
+                            <img src="${r.avatar}" class="w-8 h-8 rounded-full border border-gray-200 bg-gray-100 object-cover">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-xs text-gray-900">${r.name}</span> 
+                                    <span class="text-yellow-400 text-[10px]">★★★★★</span>
+                                </div>
+                                <p class="text-xs text-gray-600 mt-1 leading-relaxed">"${r.text}"</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                const cardHTML = `
+                    <div class="searchable-item flex flex-col p-5 md:p-6 rounded-3xl border border-gray-100 hover:shadow-xl transition-shadow bg-white gap-5">
+                        <div class="flex items-start gap-4">
+                            <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-brand-orange/10 flex items-center justify-center text-2xl md:text-3xl flex-shrink-0 shadow-sm">
+                                ${item.icon}
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="item-title font-extrabold text-lg md:text-xl text-gray-900">${item.name}</h3>
+                                <p class="item-desc text-sm text-gray-600 mt-2 leading-relaxed">${item.desc}</p>
+                                <div class="flex flex-col sm:flex-row gap-2 sm:gap-6 mt-3">
+                                    <div class="flex items-center text-xs md:text-sm text-brand-orange font-bold bg-brand-orange/10 px-3 py-1 rounded-lg w-max">
+                                        <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1.5"></i> ${item.address}
+                                    </div>
+                                    <div class="flex items-center text-xs md:text-sm text-gray-500 font-medium">
+                                        <i data-lucide="clock" class="w-4 h-4 text-brand-orange mr-1"></i> ${item.time}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-full h-[220px] rounded-2xl overflow-hidden border border-gray-200 relative bg-gray-100">
+                            <iframe 
+                                width="100%" 
+                                height="100%" 
+                                frameborder="0" style="border:0"
+                                loading="lazy"
+                                src="https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed">
+                            </iframe>
+                        </div>
+
+                        <div class="bg-gray-50/80 rounded-2xl p-4 border border-gray-100">
+                            <div class="flex items-center justify-between mb-3">
+                                <h4 class="font-bold text-xs md:text-sm text-gray-800 flex items-center gap-2">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" class="w-4 h-4"> Đánh giá của thực khách
+                                </h4>
+                                <div class="flex text-yellow-400 text-sm font-bold items-center">
+                                    4.8 ★ <span class="text-gray-400 font-normal text-xs ml-1">(120+ reviews)</span>
+                                </div>
+                            </div>
+                            
+                            ${topReviewHTML}
+                            
+                            <div id="extra-reviews-res-${i}" class="hidden mt-2 flex-col gap-2 transition-all duration-300 opacity-0 transform -translate-y-2">
+                                ${extraReviewsHTML}
+                            </div>
+                            
+                            <div class="mt-3 flex flex-col gap-2">
+                                <button onclick="toggleReviews(${i})" id="toggle-btn-res-${i}" class="w-full flex items-center justify-center gap-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-bold transition-colors shadow-sm">
+                                    <i data-lucide="chevron-down" id="toggle-icon-res-${i}" class="w-4 h-4 transition-transform duration-300"></i> <span id="toggle-text-res-${i}">Đọc thêm đánh giá tại trang</span>
+                                </button>
+
+                                <a href="${mapLink}" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href, '_blank'); return false;" class="w-full flex items-center justify-center gap-2 bg-brand-orange/10 border border-brand-orange/20 hover:bg-brand-orange hover:text-white text-brand-orange px-4 py-2.5 rounded-xl text-sm font-bold transition-all shadow-sm group">
+                                    <i data-lucide="external-link" class="w-4 h-4"></i> Mở trang Google Maps của quán
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', cardHTML);
+            }
+            lucide.createIcons();
+            
+            const loadBtn = document.getElementById('loadMoreBtn');
+            if (currentlyDisplayed >= filteredData.length) {
+                loadBtn.classList.add('hidden');
+            } else {
+                loadBtn.classList.remove('hidden');
+            }
+        }
+
+        window.toggleReviews = function(index) {
+            const extraReviewsDiv = document.getElementById(`extra-reviews-res-${index}`);
+            const icon = document.getElementById(`toggle-icon-res-${index}`);
+            const text = document.getElementById(`toggle-text-res-${index}`);
+            
+            if (extraReviewsDiv.classList.contains('hidden')) {
+                extraReviewsDiv.classList.remove('hidden');
+                setTimeout(() => {
+                    extraReviewsDiv.classList.remove('opacity-0', '-translate-y-2');
+                    extraReviewsDiv.classList.add('opacity-100', 'translate-y-0');
+                }, 10);
+                icon.classList.add('rotate-180');
+                text.textContent = "Thu gọn đánh giá";
+            } else {
+                extraReviewsDiv.classList.remove('opacity-100', 'translate-y-0');
+                extraReviewsDiv.classList.add('opacity-0', '-translate-y-2');
+                icon.classList.remove('rotate-180');
+                text.textContent = "Đọc thêm đánh giá tại trang";
+                setTimeout(() => {
+                    extraReviewsDiv.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // Render thanh lọc 12 Quận
+        const filterContainer = document.getElementById('district-filters');
+        districts.forEach(d => {
+            const btn = document.createElement('button');
+            btn.className = `filter-btn px-4 py-2 rounded-full border border-gray-200 text-sm font-bold whitespace-nowrap transition-colors ${d.id === 'all' ? 'active' : 'text-gray-600 hover:border-brand-orange hover:text-brand-orange'}`;
+            btn.textContent = d.name;
+            btn.onclick = () => filterByDistrict(d.id, btn);
+            filterContainer.appendChild(btn);
+        });
+
+        // Chạy lần đầu
+        renderBlog();
+        renderList();
+
+        document.getElementById('loadMoreBtn').addEventListener('click', () => {
+            currentlyDisplayed += 6;
+            renderList();
+        });
+
+        // 3. TÍNH NĂNG TÌM KIẾM
+        const searchInput = document.getElementById('searchInput');
+        const suggestionsBox = document.getElementById('searchSuggestions');
+        let searchTimeout;
+
+        const highlightText = (text, query) => {
+            if (!query) return text;
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<span class="search-highlight">$1</span>');
+        };
+
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const query = e.target.value.toLowerCase().trim();
+                suggestionsBox.innerHTML = '';
+
+                if (query === '') {
+                    suggestionsBox.classList.add('hidden');
+                    return;
+                }
+
+                const matches = restaurantsData.filter(item => 
+                    item.name.toLowerCase().includes(query) || 
+                    item.desc.toLowerCase().includes(query) ||
+                    item.district.toLowerCase().includes(query)
+                ).slice(0, 5); 
+
+                if(matches.length > 0) {
+                    matches.forEach((item) => {
+                        const suggestItem = document.createElement('div');
+                        suggestItem.className = 'px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0 flex items-center gap-3';
+                        suggestItem.innerHTML = `
+                            <div class="text-xl w-10 h-10 flex items-center justify-center bg-brand-orange/10 rounded-md flex-shrink-0 mr-2">
+                                ${item.icon}
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-bold text-sm text-gray-800">${highlightText(item.name, query)}</span>
+                                <span class="text-xs text-gray-500 truncate max-w-[200px] md:max-w-xs">${item.address}</span>
+                            </div>
+                        `;
+                        suggestItem.onclick = () => {
+                            filteredData = [item];
+                            currentlyDisplayed = 1;
+                            renderList();
+                            searchInput.value = item.name;
+                            suggestionsBox.classList.add('hidden');
+                            document.getElementById('directory').scrollIntoView({behavior:'smooth'});
+                        };
+                        suggestionsBox.appendChild(suggestItem);
+                    });
+                    suggestionsBox.classList.remove('hidden');
+                } else {
+                    suggestionsBox.innerHTML = '<div class="px-4 py-3 text-sm text-gray-500 text-center">Không tìm thấy quán nào.</div>';
+                    suggestionsBox.classList.remove('hidden');
+                }
+            }, 300);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.classList.add('hidden');
+            }
+        });
+        
+        searchInput.addEventListener('focus', () => {
+            if (searchInput.value.trim() !== '' && suggestionsBox.innerHTML !== '') {
+                suggestionsBox.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
