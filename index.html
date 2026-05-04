@@ -280,6 +280,7 @@
                             <i data-lucide="map" class="inline-block w-6 h-6 mr-2 text-brand-orange mb-1"></i>
                             Bản Đồ Quán Ngon
                         </h2>
+                        <p class="text-gray-500 text-sm mb-2">Xem chi tiết hình ảnh và vị trí bản đồ của 58 quán ăn trải khắp 12 Quận Hà Nội.</p>
                         
                         <!-- Lọc 12 Quận -->
                         <div class="flex overflow-x-auto pb-2 gap-2 no-scrollbar w-full" id="district-filters">
@@ -310,7 +311,6 @@
                     <div class="bg-white rounded-3xl shadow-soft p-4 border border-gray-50 mb-8">
                         <div class="w-full aspect-video rounded-2xl overflow-hidden bg-gray-100">
                             <!-- Nhúng Video YouTube giới thiệu Ẩm thực Hà Nội -->
-                            <!-- CHÚ Ý: Sau này có video chính thức, bạn thay link vào thuộc tính src="..." ở dưới -->
                             <iframe 
                                 width="100%" 
                                 height="100%" 
@@ -322,7 +322,7 @@
                             </iframe>
                         </div>
                         <p class="text-sm text-gray-600 mt-4 px-2 font-medium text-center">
-                            Theo chân Food Blogger khám phá các ngóc ngách ẩm thực đường phố Hà Nội vạn người mê.
+                            Này các cậu, hãy xem video này nhé!
                         </p>
                     </div>
 
@@ -419,7 +419,6 @@
                         </li>
                     </ul>
                 </div>
-                <!-- Cột thứ 3: Chứa nút kêu gọi hành động thay vì liên kết nhanh -->
                 <div class="flex flex-col items-start lg:items-center justify-center">
                     <h4 class="text-lg font-bold mb-6 uppercase tracking-wider text-white">Đóng góp cho cộng đồng</h4>
                     <button onclick="openReviewRequestModal()" class="relative inline-flex h-14 items-center justify-center overflow-hidden rounded-full bg-brand-orange px-8 font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95">
@@ -823,7 +822,7 @@
 
 
         // =========================================================================
-        // 2. DATA QUÁN ĂN (58 Quán)
+        // 2. DATA QUÁN ĂN (58 Quán) - BỔ SUNG FILE ẢNH CHO TỪNG QUÁN
         // =========================================================================
         const districts = [
             { id: 'all', name: 'Tất cả' },
@@ -842,319 +841,87 @@
         ];
 
         const restaurantsData = [
-            // I. CẦU GIẤY (5 quán)
-            { district: 'cau-giay', name: 'Bún riêu cua tóp mỡ Chan Chan', address: '27 Tô Hiệu, Cầu Giấy', time: '7h30-14h, 17h30-22h', desc: 'Bún riêu cua màu đỏ cam hấp dẫn, vị chua nhẹ. Tô đầy đặn riêu cua béo mềm, tóp mỡ giòn rụm.', icon: '🍜', reviews: [
-                { name: 'Minh Tuấn', text: 'Tóp mỡ giòn siêu ngon, ăn mãi không ngấy. Nước dùng chua thanh rất vừa miệng.', avatar: 'https://i.pravatar.cc/150?img=11' },
-                { name: 'Thu Thảo', text: 'Quán rộng rãi, sạch গঠন. Riêu cua xịn ăn không bị bở. Chỗ để xe hơi chật vào giờ cao điểm.', avatar: 'https://i.pravatar.cc/150?img=10' },
-                { name: 'Hải Đăng', text: 'Giá cả hợp lý cho khu vực Cầu Giấy. Mình hay gọi thêm quẩy ăn bao no.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=HaiDang' }
-            ]},
-            { district: 'cau-giay', name: 'Bánh ép nhà Xoài', address: '219 Trần Đăng Ninh, Cầu Giấy', time: '11h-21h30', desc: 'Đậm hương vị bánh ép Huế, nóng giòn nhẹ bên ngoài, dẻo mềm bên trong.', icon: '🌮', reviews: [
-                { name: 'Linh Chi', text: 'Nước chấm ngon xuất sắc, bánh nóng hổi vừa thổi vừa ăn.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Quốc Bảo', text: 'Đúng chuẩn vị Huế luôn. Tré nướng và bánh ép tôm thịt là the best!', avatar: 'https://i.pravatar.cc/150?img=12' },
-                { name: 'Phương Anh', text: 'Quán decor xinh xắn, đồ ăn ra nhanh dù quán đông khách.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=PhuongAnh' }
-            ]},
-            { district: 'cau-giay', name: 'Mỳ chua cay', address: '20 Hoàng Quốc Việt, Cầu Giấy', time: '18h-3h sáng', desc: 'Nước dùng chua cay kích thích vị giác. Sợi mì dai mềm, topping đa dạng.', icon: '🍜', reviews: [
-                { name: 'Hùng Cường', text: 'Cứu đói đêm khuya tuyệt vời. Nước dùng cay xé lưỡi nhưng cực kỳ cuốn.', avatar: 'https://i.pravatar.cc/150?img=60' },
-                { name: 'Mai Lan', text: 'Topping siêu nhiều, mỳ xào hải sản chua cay ăn rất vừa miệng.', avatar: 'https://i.pravatar.cc/150?img=16' },
-                { name: 'Đức Huy', text: 'Mở đến 3h sáng nên anh em đi nhậu về ghé ăn là ấm bụng.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=DucHuy' }
-            ]},
-            { district: 'cau-giay', name: 'Xôi Ngọc', address: '1/259 Yên Hòa, Cầu Giấy', time: '5h30-14h', desc: 'Xôi xéo, xôi thịt, pate... Hạt xôi dẻo thơm ăn kèm topping béo ngậy.', icon: '🍚', reviews: [
-                { name: 'An An', text: 'Xôi xéo ở đây mỡ hành thơm nức mũi. Hạt xôi tơi dẻo không bị nát.', avatar: 'https://i.pravatar.cc/150?img=20' },
-                { name: 'Văn Tú', text: 'Pate nhà làm thơm béo ngậy, thịt kho tàu nhừ tơi. Ngày nào cũng ăn sáng ở đây.', avatar: 'https://i.pravatar.cc/150?img=14' },
-                { name: 'Hương Giang', text: 'Cô chủ nhiệt tình, xôi ú ụ mà có 25k. Rất đáng đồng tiền bát gạo.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=HuongGiang' }
-            ]},
-            { district: 'cau-giay', name: 'Xèo Xèo quán - gà nướng lu', address: '11/11/58 Dương Khuê, Cầu Giấy', time: '10h-22h', desc: 'Gà nướng lu thơm lừng, da vàng giòn, thịt mọng nước đậm đà.', icon: '🍗', reviews: [
-                { name: 'Bảo Trần', text: 'Gà nướng mật ong da giòn rụm. Thịt bên trong vẫn ẩm mọng không bị khô.', avatar: 'https://i.pravatar.cc/150?img=68' },
-                { name: 'Khánh Ly', text: 'Sốt me chấm gà đỉnh cao. Đi nhóm 4 người gọi 1 con là no căng.', avatar: 'https://i.pravatar.cc/150?img=1' },
-                { name: 'Nhật Nam', text: 'Quán nhậu sinh viên giá cả rất hợp lý. Không gian thoáng.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=NhatNam' }
-            ]},
+            // I. CẦU GIẤY
+            { district: 'cau-giay', name: 'Bún riêu cua tóp mỡ Chan Chan', address: '27 Tô Hiệu, Cầu Giấy', time: '7h30-14h, 17h30-22h', desc: 'Bún riêu cua màu đỏ cam hấp dẫn, vị chua nhẹ. Tô đầy đặn riêu cua béo mềm, tóp mỡ giòn rụm.', icon: '🍜', imgFile: 'q-bun-rieu-chan.jpg', reviews: [{ name: 'Minh Tuấn', text: 'Tóp mỡ giòn siêu ngon, ăn mãi không ngấy.', avatar: 'https://i.pravatar.cc/150?img=11' }] },
+            { district: 'cau-giay', name: 'Bánh ép nhà Xoài', address: '219 Trần Đăng Ninh, Cầu Giấy', time: '11h-21h30', desc: 'Đậm hương vị bánh ép Huế, nóng giòn nhẹ bên ngoài, dẻo mềm bên trong.', icon: '🌮', imgFile: 'q-banh-ep-xoai.jpg', reviews: [{ name: 'Linh Chi', text: 'Nước chấm ngon xuất sắc, bánh nóng hổi.', avatar: 'https://i.pravatar.cc/150?img=5' }] },
+            { district: 'cau-giay', name: 'Mỳ chua cay', address: '20 Hoàng Quốc Việt, Cầu Giấy', time: '18h-3h sáng', desc: 'Nước dùng chua cay kích thích vị giác. Sợi mì dai mềm, topping đa dạng.', icon: '🍜', imgFile: 'q-my-chua-cay.jpg', reviews: [{ name: 'Hùng Cường', text: 'Cứu đói đêm khuya tuyệt vời.', avatar: 'https://i.pravatar.cc/150?img=60' }] },
+            { district: 'cau-giay', name: 'Xôi Ngọc', address: '1/259 Yên Hòa, Cầu Giấy', time: '5h30-14h', desc: 'Xôi xéo, xôi thịt, pate... Hạt xôi dẻo thơm ăn kèm topping béo ngậy.', icon: '🍚', imgFile: 'q-xoi-ngoc.jpg', reviews: [{ name: 'An An', text: 'Xôi xéo ở đây mỡ hành thơm nức mũi.', avatar: 'https://i.pravatar.cc/150?img=20' }] },
+            { district: 'cau-giay', name: 'Xèo Xèo quán - gà nướng lu', address: '11/11/58 Dương Khuê, Cầu Giấy', time: '10h-22h', desc: 'Gà nướng lu thơm lừng, da vàng giòn, thịt mọng nước đậm đà.', icon: '🍗', imgFile: 'q-xeo-xeo.jpg', reviews: [{ name: 'Bảo Trần', text: 'Gà nướng mật ong da giòn rụm.', avatar: 'https://i.pravatar.cc/150?img=68' }] },
             
-            // II. NAM TỪ LIÊM (5 quán)
-            { district: 'nam-tu-liem', name: 'Nhà hàng bò 34', address: 'CTB2, Lê Đức Thọ, Mỹ Đình 2, Nam Từ Liêm', time: '6h-23h', desc: 'Chuyên các món từ bò, nướng lẩu đậm đà, thịt bò tươi mềm.', icon: '🥩', reviews: [
-                { name: 'Đức Phát', text: 'Thịt bò nướng tảng siêu mềm, tẩm ướp vừa vặn. Nhân viên nướng giúp tại bàn.', avatar: 'https://i.pravatar.cc/150?img=53' },
-                { name: 'Mỹ Linh', text: 'Không gian rộng rãi, có chỗ chơi cho trẻ em. Thích hợp đi ăn gia đình.', avatar: 'https://i.pravatar.cc/150?img=9' },
-                { name: 'Thanh Tùng', text: 'Lẩu bò nhúng dấm chua thanh, gầu bò giòn sần sật. Chắc chắn sẽ quay lại.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=ThanhTung' }
-            ]},
-            { district: 'nam-tu-liem', name: 'Bánh tráng cuốn thịt heo Hà Trần', address: '2 Đồng Me, Mễ Trì, Nam Từ Liêm', time: '9h-21h30', desc: 'Thịt heo luộc ngọt, rau sống tươi xanh, mắm nêm đậm đà.', icon: '🌯', reviews: [
-                { name: 'Mai Phương', text: 'Mắm nêm pha chuẩn vị Đà Nẵng, không bị mặn gắt. Thịt heo luộc tỉ lệ mỡ nạc vừa phải.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Quang Dũng', text: 'Rau sống sạch sẽ, xin thêm rau thoải mái cô chủ vẫn vui vẻ.', avatar: 'https://i.pravatar.cc/150?img=11' },
-                { name: 'Bích Ngọc', text: 'Nem lụi nướng sả rất thơm. Gọi 1 mẹt cuốn là 2 người ăn no kễnh.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=BichNgoc' }
-            ]},
-            { district: 'nam-tu-liem', name: 'Bún chả 27', address: '27/39 Đình Thôn, Nam Từ Liêm', time: '6h30-15h30, 17h-20h', desc: 'Chả nướng than hoa thơm lừng, thịt cháy xém cạnh hấp dẫn.', icon: '🥢', reviews: [
-                { name: 'Hải Yến', text: 'Chả băm rất mềm và không bị khô, nướng xém cạnh ăn cực kỳ đưa miệng.', avatar: 'https://i.pravatar.cc/150?img=10' },
-                { name: 'Hoàng Phong', text: 'Nước chấm pha rất vừa vặn, không bị ngọt quá như mấy hàng bún chả bây giờ.', avatar: 'https://i.pravatar.cc/150?img=12' },
-                { name: 'Minh Khang', text: 'Bún chả giá bình dân mà chất lượng tuyệt vời. Đồ chua giòn tan.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=MinhKhang' }
-            ]},
-            { district: 'nam-tu-liem', name: 'Huyền Lòng 62', address: '62 Đình Thôn, Nam Từ Liêm', time: '5h-16h', desc: 'Cháo lòng thơm ngon, lòng làm sạch sẽ giòn dai không hôi.', icon: '🥣', reviews: [
-                { name: 'Tuấn Phong', text: 'Cháo sánh mịn, lòng lợn luộc trắng giòn, dồi chiên cực đỉnh.', avatar: 'https://i.pravatar.cc/150?img=13' },
-                { name: 'Thanh Trúc', text: 'Lòng trần không hề bị hôi, chứng tỏ làm rất sạch. Mắm tôm pha ngon.', avatar: 'https://i.pravatar.cc/150?img=1' },
-                { name: 'Quốc Bảo', text: 'Sáng ra làm bát cháo lòng thêm bát tiết canh là ấm bụng đi làm.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=QuocBao' }
-            ]},
-            { district: 'nam-tu-liem', name: 'Chân gà A Phương', address: '22/56 Lê Quang Đạo, Nam Từ Liêm', time: '16h-22h', desc: 'Chân gà nướng mật ong thơm lừng, nước chấm mắm me chua ngọt.', icon: '🍗', reviews: [
-                { name: 'Ngọc Mai', text: 'Gây nghiện thực sự, nước chấm me thần thánh chấm bánh mỳ bao phê.', avatar: 'https://i.pravatar.cc/150?img=16' },
-                { name: 'Đức Huy', text: 'Chân gà nướng to mập, ướp đậm đà nướng xém xém ăn lai rai với bia tuyệt cú mèo.', avatar: 'https://i.pravatar.cc/150?img=14' },
-                { name: 'Lan Hương', text: 'Ngoài chân gà thì sườn sụn nướng cũng rất đáng thử nhé mọi người.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=LanHuong' }
-            ]},
+            // II. NAM TỪ LIÊM
+            { district: 'nam-tu-liem', name: 'Nhà hàng bò 34', address: 'CTB2, Lê Đức Thọ, Mỹ Đình 2', time: '6h-23h', desc: 'Chuyên các món từ bò, nướng lẩu đậm đà, thịt bò tươi mềm.', icon: '🥩', imgFile: 'q-bo-34.jpg', reviews: [{ name: 'Đức Phát', text: 'Thịt bò nướng tảng siêu mềm, tẩm ướp vừa vặn.', avatar: 'https://i.pravatar.cc/150?img=53' }] },
+            { district: 'nam-tu-liem', name: 'Bánh tráng cuốn thịt heo Hà Trần', address: '2 Đồng Me, Mễ Trì', time: '9h-21h30', desc: 'Thịt heo luộc ngọt, rau sống tươi xanh, mắm nêm đậm đà.', icon: '🌯', imgFile: 'q-cuon-ha-tran.jpg', reviews: [{ name: 'Mai Phương', text: 'Mắm nêm pha chuẩn vị Đà Nẵng.', avatar: 'https://i.pravatar.cc/150?img=5' }] },
+            { district: 'nam-tu-liem', name: 'Bún chả 27', address: '27/39 Đình Thôn', time: '6h30-15h30, 17h-20h', desc: 'Chả nướng than hoa thơm lừng, thịt cháy xém cạnh hấp dẫn.', icon: '🥢', imgFile: 'q-bun-cha-27.jpg', reviews: [{ name: 'Hải Yến', text: 'Chả băm rất mềm và không bị khô.', avatar: 'https://i.pravatar.cc/150?img=10' }] },
+            { district: 'nam-tu-liem', name: 'Huyền Lòng 62', address: '62 Đình Thôn', time: '5h-16h', desc: 'Cháo lòng thơm ngon, lòng làm sạch sẽ giòn dai không hôi.', icon: '🥣', imgFile: 'q-huyen-long.jpg', reviews: [{ name: 'Tuấn Phong', text: 'Cháo sánh mịn, lòng lợn luộc trắng giòn.', avatar: 'https://i.pravatar.cc/150?img=13' }] },
+            { district: 'nam-tu-liem', name: 'Chân gà A Phương', address: '22/56 Lê Quang Đạo', time: '16h-22h', desc: 'Chân gà nướng mật ong thơm lừng, nước chấm mắm me chua ngọt.', icon: '🍗', imgFile: 'q-chan-ga-phuong.jpg', reviews: [{ name: 'Ngọc Mai', text: 'Gây nghiện thực sự, nước chấm me thần thánh.', avatar: 'https://i.pravatar.cc/150?img=16' }] },
 
-            // III. BẮC TỪ LIÊM (5 quán)
-            { district: 'bac-tu-liem', name: 'Phở bò Tư Hậu', address: '521 Thụy Phương, Bắc Từ Liêm', time: '5h30-10h30', desc: 'Nước dùng thanh trong, vị ngọt từ xương hầm, thịt bò tươi mềm.', icon: '🍜', reviews: [
-                { name: 'Thế Anh', text: 'Phở truyền thống ăn rất êm bụng. Nước dùng thanh không bị lợ vị mì chính.', avatar: 'https://i.pravatar.cc/150?img=15' },
-                { name: 'Cẩm Lệ', text: 'Bánh phở mềm dai, thịt lõi rùa giòn sần sật. Quán vỉa hè nhưng rất sạch sẽ.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Hùng Sơn', text: 'Điểm tâm sáng quen thuộc của người dân khu Thụy Phương. 8h sáng là hay hết thịt lõi.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=HungSon' }
-            ]},
-            { district: 'bac-tu-liem', name: 'Nhà Hàng Sáu Béo', address: '152/134 Cầu Diễn, Bắc Từ Liêm', time: '07h-00h', desc: 'Bia mát lạnh, thực đơn nhậu phong phú từ hải sản đến đồ nướng.', icon: '🍻', reviews: [
-                { name: 'Trọng Khang', text: 'Quán nhậu lý tưởng khu Cầu Diễn. Đồ ăn lên nhanh, bia hơi lạnh buốt.', avatar: 'https://i.pravatar.cc/150?img=33' },
-                { name: 'Tuyết Mai', text: 'Mồi nhậu phong phú, mình thích nhất món cá chép ôm dưa ở đây.', avatar: 'https://i.pravatar.cc/150?img=9' },
-                { name: 'Nhật Vượng', text: 'Chỗ để xe siêu rộng, phù hợp liên hoan công ty hoặc đi nhóm đông.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=NhatVuong' }
-            ]},
-            { district: 'bac-tu-liem', name: 'Lẩu Nấm Gia Khánh', address: '06-C11 Khu Embassy Garden, Bắc Từ Liêm', time: '10h20-22h', desc: 'Nước lẩu thanh ngọt từ nhiều loại nấm tự nhiên, nguyên liệu tươi.', icon: '🍲', reviews: [
-                { name: 'Diệu Nhi', text: 'Ăn thanh đạm, tốt cho sức khỏe. Nước lẩu nấm bồi bổ cơ thể rất tốt.', avatar: 'https://i.pravatar.cc/150?img=20' },
-                { name: 'Văn Tú', text: 'Nước lẩu thơm lừng, thịt bò ta nhúng kèm nấm kim châm ăn ngọt lịm.', avatar: 'https://i.pravatar.cc/150?img=11' },
-                { name: 'Hoài An', text: 'Không gian sang trọng, phục vụ chuyên nghiệp. Rất thích hợp mời khách.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=HoaiAn' }
-            ]},
-            { district: 'bac-tu-liem', name: 'Ốc Xứ Thanh', address: '127 Sông Nhuệ, Bắc Từ Liêm', time: '17h15-23h', desc: 'Ốc tươi giòn xào rang đậm đà phong vị miền Trung.', icon: '🐌', reviews: [
-                { name: 'Kim Oanh', text: 'Ốc xào me cay cay ngọt ngọt ngon lắm. Nước sốt quệt bánh mỳ tuyệt vời.', avatar: 'https://i.pravatar.cc/150?img=10' },
-                { name: 'Đình Bảo', text: 'Nhiều món ốc độc lạ chuẩn vị Thanh Hóa. Ốc hút xào sả ớt đỉnh cao.', avatar: 'https://i.pravatar.cc/150?img=12' },
-                { name: 'Bảo Trần', text: 'Giá cả sinh viên, cuối tuần hay tụ tập bạn bè ra đây chém gió.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=BaoTran' }
-            ]},
-            { district: 'bac-tu-liem', name: 'Chè bưởi Tư Đỉnh', address: '193/7 Phú Diễn, Bắc Từ Liêm', time: '9h-23h', desc: 'Cùi bưởi giòn sần sật không đắng, nước cốt dừa béo nhẹ.', icon: '🍧', reviews: [
-                { name: 'Thùy Trang', text: 'Chè không bị ngọt gắt, cùi bưởi làm rất khéo không hề bị he đắng.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Phạm Hùng', text: 'Chè bưởi thơm mùi cốt dừa, đậu xanh ninh nhừ tơi. Ngon!', avatar: 'https://i.pravatar.cc/150?img=13' },
-                { name: 'Thu Hằng', text: 'Quán chè chân ái tuổi sinh viên. Mùa hè làm cốc chè bưởi đá là tỉnh người.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=ThuHang' }
-            ]},
+            // III. BẮC TỪ LIÊM
+            { district: 'bac-tu-liem', name: 'Phở bò Tư Hậu', address: '521 Thụy Phương', time: '5h30-10h30', desc: 'Nước dùng thanh trong, vị ngọt từ xương hầm, thịt bò tươi mềm.', icon: '🍜', imgFile: 'q-pho-tu-hau.jpg', reviews: [{ name: 'Thế Anh', text: 'Phở truyền thống ăn rất êm bụng.', avatar: 'https://i.pravatar.cc/150?img=15' }] },
+            { district: 'bac-tu-liem', name: 'Nhà Hàng Sáu Béo', address: '152/134 Cầu Diễn', time: '07h-00h', desc: 'Bia mát lạnh, thực đơn nhậu phong phú từ hải sản đến đồ nướng.', icon: '🍻', imgFile: 'q-sau-beo.jpg', reviews: [{ name: 'Trọng Khang', text: 'Quán nhậu lý tưởng khu Cầu Diễn.', avatar: 'https://i.pravatar.cc/150?img=33' }] },
+            { district: 'bac-tu-liem', name: 'Lẩu Nấm Gia Khánh', address: '06-C11 Khu Embassy Garden', time: '10h20-22h', desc: 'Nước lẩu thanh ngọt từ nhiều loại nấm tự nhiên, nguyên liệu tươi.', icon: '🍲', imgFile: 'q-lau-nam.jpg', reviews: [{ name: 'Diệu Nhi', text: 'Ăn thanh đạm, tốt cho sức khỏe.', avatar: 'https://i.pravatar.cc/150?img=20' }] },
+            { district: 'bac-tu-liem', name: 'Ốc Xứ Thanh', address: '127 Sông Nhuệ', time: '17h15-23h', desc: 'Ốc tươi giòn xào rang đậm đà phong vị miền Trung.', icon: '🐌', imgFile: 'q-oc-xu-thanh.jpg', reviews: [{ name: 'Kim Oanh', text: 'Ốc xào me cay cay ngọt ngọt ngon lắm.', avatar: 'https://i.pravatar.cc/150?img=10' }] },
+            { district: 'bac-tu-liem', name: 'Chè bưởi Tư Đỉnh', address: '193/7 Phú Diễn', time: '9h-23h', desc: 'Cùi bưởi giòn sần sật không đắng, nước cốt dừa béo nhẹ.', icon: '🍧', imgFile: 'q-che-tu-dinh.jpg', reviews: [{ name: 'Thùy Trang', text: 'Chè không bị ngọt gắt, cùi bưởi làm rất khéo.', avatar: 'https://i.pravatar.cc/150?img=5' }] },
 
-            // IV. HOÀN KIẾM (5 quán)
-            { district: 'hoan-kiem', name: 'Phở bò Khôi hói', address: '50 Hàng Vải, Phố cổ, Hoàn Kiếm', time: '6h-21h', desc: 'Nước dùng đậm vị thơm mùi xương hầm bò. Thịt bò đầy đặn, bánh phở dai.', icon: '🍜', reviews: [
-                { name: 'Tú Anh', text: 'Nước dùng béo ngậy đúng kiểu phở lõi rùa Hà Nội cổ. Rất đáng thử!', avatar: 'https://i.pravatar.cc/150?img=1' },
-                { name: 'David Smith', text: 'Best pho in the Old Quarter! Highly recommended by local friends.', avatar: 'https://i.pravatar.cc/150?img=68' },
-                { name: 'Hải Nam', text: 'Sáng cuối tuần nào cũng lóc cóc lên phố cổ ăn bát phở lõi gầu giòn ở đây.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=HaiNam' }
-            ]},
-            { district: 'hoan-kiem', name: 'Huyền Vi - Sữa chua thạch', address: '5B Đinh Liệt, Hàng Đào, Hoàn Kiếm', time: '8h-21h', desc: 'Sữa chua chua ngọt kết hợp thạch lá nếp thơm dịu dẻo mềm.', icon: '🥤', reviews: [
-                { name: 'Khánh Ly', text: 'Giải nhiệt mùa hè số 1 phố cổ. Sữa chua mềm mịn, thạch xắt miếng to.', avatar: 'https://i.pravatar.cc/150?img=9' },
-                { name: 'Nhật Nam', text: 'Thạch lá nếp thơm mùi dứa, kết hợp sữa chua trân châu cốt dừa ăn hoài không chán.', avatar: 'https://i.pravatar.cc/150?img=11' },
-                { name: 'Lan Anh', text: 'Đi bộ quanh Bờ Hồ mỏi chân ghé vào làm ly sữa chua thạch là hết sẩy.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=LanAnh' }
-            ]},
-            { district: 'hoan-kiem', name: 'Bún mọc Thủy', address: '10 ngõ Đào Duy Từ, Hoàn Kiếm', time: '7h-13h30', desc: 'Viên mọc dai giòn thơm thịt, nước dùng trong vắt thanh khiết.', icon: '🥣', reviews: [
-                { name: 'Lê Dũng', text: 'Mọc sụn nhai sần sật đã miệng. Nước dùng ninh từ xương thịt lợn ngọt thanh.', avatar: 'https://i.pravatar.cc/150?img=12' },
-                { name: 'Hương Ly', text: 'Quán nằm trong ngõ nhỏ phố Đào Duy Từ nhưng lúc nào cũng đông khách.', avatar: 'https://i.pravatar.cc/150?img=10' },
-                { name: 'Tuấn Đạt', text: 'Mình cực thích măng khô ở đây, giòn và ngấm vị.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=TuanDat' }
-            ]},
-            { district: 'hoan-kiem', name: 'Chả cá Thăng Long', address: '6B Đường Thành, Hoàn Kiếm', time: '9h-23h', desc: 'Chả cá tẩm ướp đậm đà chiên vàng xào trên chảo gang với thì là.', icon: '🐟', reviews: [
-                { name: 'Cẩm Tú', text: 'Ăn kèm mắm tôm ngon nhức nách. Không gian sang trọng, phục vụ chu đáo.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Quang Khải', text: 'Chả cá lăng mềm ngọt, chiên xém cạnh ăn với bún và hành chẻ xuất sắc.', avatar: 'https://i.pravatar.cc/150?img=14' },
-                { name: 'Hoàng Phong', text: 'Một trong những quán chả cá đáng ăn nhất Hà Nội. Dẫn khách du lịch đến đây là chuẩn.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Phong' }
-            ]},
-            { district: 'hoan-kiem', name: 'Cháo sườn sụn Huyền Anh', address: '14 Đồng Xuân, Hoàn Kiếm', time: '10h-15h', desc: 'Cháo sánh mịn ngọt thanh, sườn sụn sần sật ăn kèm quẩy giòn.', icon: '🥣', reviews: [
-                { name: 'Thanh Trúc', text: 'Bát cháo tuổi thơ. Cháo xay nhuyễn mịn màng như lụa, sườn sụn ninh nhừ.', avatar: 'https://i.pravatar.cc/150?img=20' },
-                { name: 'Hùng Sơn', text: 'Cháo quẩy ruốc ở đây là huyền thoại chợ Đồng Xuân rồi. Mùa đông ăn cực ấm bụng.', avatar: 'https://i.pravatar.cc/150?img=53' },
-                { name: 'Thùy Linh', text: 'Cháo xay bột gạo tẻ đúng kiểu miền Bắc truyền thống. Đậm đà vị xương.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=ThuyLinh' }
-            ]},
+            // IV. HOÀN KIẾM
+            { district: 'hoan-kiem', name: 'Phở bò Khôi hói', address: '50 Hàng Vải, Phố cổ', time: '6h-21h', desc: 'Nước dùng đậm vị thơm mùi xương hầm bò. Thịt bò đầy đặn, bánh phở dai.', icon: '🍜', imgFile: 'q-pho-khoi-hoi.jpg', reviews: [{ name: 'Tú Anh', text: 'Nước dùng béo ngậy đúng kiểu phở lõi rùa Hà Nội cổ.', avatar: 'https://i.pravatar.cc/150?img=1' }] },
+            { district: 'hoan-kiem', name: 'Huyền Vi - Sữa chua thạch', address: '5B Đinh Liệt, Hàng Đào', time: '8h-21h', desc: 'Sữa chua chua ngọt kết hợp thạch lá nếp thơm dịu dẻo mềm.', icon: '🥤', imgFile: 'q-huyen-vi.jpg', reviews: [{ name: 'Khánh Ly', text: 'Giải nhiệt mùa hè số 1 phố cổ.', avatar: 'https://i.pravatar.cc/150?img=9' }] },
+            { district: 'hoan-kiem', name: 'Bún mọc Thủy', address: '10 ngõ Đào Duy Từ', time: '7h-13h30', desc: 'Viên mọc dai giòn thơm thịt, nước dùng trong vắt thanh khiết.', icon: '🥣', imgFile: 'q-bun-moc-thuy.jpg', reviews: [{ name: 'Lê Dũng', text: 'Mọc sụn nhai sần sật đã miệng.', avatar: 'https://i.pravatar.cc/150?img=12' }] },
+            { district: 'hoan-kiem', name: 'Chả cá Thăng Long', address: '6B Đường Thành', time: '9h-23h', desc: 'Chả cá tẩm ướp đậm đà chiên vàng xào trên chảo gang với thì là.', icon: '🐟', imgFile: 'q-cha-ca-thang-long.jpg', reviews: [{ name: 'Cẩm Tú', text: 'Ăn kèm mắm tôm ngon nhức nách.', avatar: 'https://i.pravatar.cc/150?img=5' }] },
+            { district: 'hoan-kiem', name: 'Cháo sườn sụn Huyền Anh', address: '14 Đồng Xuân', time: '10h-15h', desc: 'Cháo sánh mịn ngọt thanh, sườn sụn sần sật ăn kèm quẩy giòn.', icon: '🥣', imgFile: 'q-chao-suon-huyen-anh.jpg', reviews: [{ name: 'Thanh Trúc', text: 'Bát cháo tuổi thơ. Cháo xay nhuyễn mịn màng như lụa.', avatar: 'https://i.pravatar.cc/150?img=20' }] },
 
-            // V. HAI BÀ TRƯNG (5 quán)
-            { district: 'hai-ba-trung', name: 'Bún ốc Hà Thành', address: '3 Phù Đổng Thiên Vương, Hai Bà Trưng', time: '7h-19h', desc: 'Nước dùng chua thanh thơm dấm bỗng, ốc giòn dai dân dã.', icon: '🐌', reviews: [
-                { name: 'Quỳnh Anh', text: 'Ốc to nhồi thịt siêu ngon. Nước bún ốc chua thanh chuẩn vị dấm bỗng.', avatar: 'https://i.pravatar.cc/150?img=1' },
-                { name: 'Đức Huy', text: 'Bún ốc nguội ở đây cũng rất tuyệt. Ốc giòn, nước chấm mắm gừng vừa miệng.', avatar: 'https://i.pravatar.cc/150?img=11' },
-                { name: 'Kim Dung', text: 'Đúng chuẩn bún ốc cổ truyền Hà Nội. Không cho thêm linh tinh đậu bò giò tai.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=KimDung' }
-            ]},
-            { district: 'hai-ba-trung', name: 'Cà Phê Thái', address: '27 Triệu Việt Vương, Hai Bà Trưng', time: '6h30-22h', desc: 'Cà phê gia truyền từ 1926. Đậm đà thơm nồng đúng vị truyền thống.', icon: '☕', reviews: [
-                { name: 'Đình Bảo', text: 'Vị cà phê rang xay cổ truyền đậm chất Hà Nội. Ngồi vỉa hè ngắm phố xá cực chill.', avatar: 'https://i.pravatar.cc/150?img=12' },
-                { name: 'Bích Ngọc', text: 'Không gian hoài cổ, cà phê nâu đá siêu đỉnh, tỉnh ngủ cả ngày.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Thanh Tùng', text: 'Quán lâu đời trên con phố cà phê sầm uất. Mình uống ở đây từ thời sinh viên.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=ThanhTung' }
-            ]},
-            { district: 'hai-ba-trung', name: 'Cơm 123', address: '55 phố Huế, Hai Bà Trưng', time: '10h-21h', desc: 'Cơm bình dân đa dạng món gia đình chế biến đậm đà.', icon: '🍱', reviews: [
-                { name: 'Thanh Hằng', text: 'Bữa trưa văn phòng nhanh gọn lẹ. Cơm tấm sườn bì nướng rất ngon.', avatar: 'https://i.pravatar.cc/150?img=9' },
-                { name: 'Quốc Bảo', text: 'Đồ ăn đa dạng, giá cả hợp lý so với mặt bằng chung trên phố Huế.', avatar: 'https://i.pravatar.cc/150?img=14' },
-                { name: 'Mai Phương', text: 'Phục vụ nhanh, cơm mang ra luôn nóng hổi. Rất ưng ý.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=MaiPhuong' }
-            ]},
-            { district: 'hai-ba-trung', name: 'Cháo trai cô Hằng', address: '26 Trần Xuân Soạn, Hai Bà Trưng', time: '15h-21h', desc: 'Cháo nhuyễn mịn, ngọt tự nhiên từ trai. Thịt trai dai thơm.', icon: '🥣', reviews: [
-                { name: 'Hoài Nam', text: 'Cháo chiều lót dạ tuyệt vời. Cháo xay mịn béo ngậy.', avatar: 'https://i.pravatar.cc/150?img=15' },
-                { name: 'Hương Ly', text: 'Cháo quẩy trai thêm tí tiêu ớt là ấm bụng ngay mùa đông.', avatar: 'https://i.pravatar.cc/150?img=10' },
-                { name: 'Trọng Khang', text: 'Thịt trai xào đậm đà, không bị dai quá. Rất dễ ăn.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Khang' }
-            ]},
-            { district: 'hai-ba-trung', name: 'Tiệm bánh Hoan', address: '46 Trần Xuân Soạn, Hai Bà Trưng', time: '6h-21h', desc: 'Bánh mì pate lâu đời. Vỏ giòn, nhân truyền thống giữ nguyên hương vị.', icon: '🥖', reviews: [
-                { name: 'Bảo Trần', text: 'Pate béo ngậy ăn không biết chán. Bánh mì nướng giòn rụm.', avatar: 'https://i.pravatar.cc/150?img=33' },
-                { name: 'Tuyết Mai', text: 'Bánh mì chảo ở đây cũng rất đáng thử. Sốt vang thịt mềm tơi.', avatar: 'https://i.pravatar.cc/150?img=16' },
-                { name: 'Nhật Nam', text: 'Hương vị tuổi thơ không hề thay đổi. Giá cả vẫn rất phải chăng.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=NhatNam' }
-            ]},
+            // V. HAI BÀ TRƯNG
+            { district: 'hai-ba-trung', name: 'Bún ốc Hà Thành', address: '3 Phù Đổng Thiên Vương', time: '7h-19h', desc: 'Nước dùng chua thanh thơm dấm bỗng, ốc giòn dai dân dã.', icon: '🐌', imgFile: 'q-bun-oc-ha-thanh.jpg', reviews: [{ name: 'Quỳnh Anh', text: 'Ốc to nhồi thịt siêu ngon.', avatar: 'https://i.pravatar.cc/150?img=1' }] },
+            { district: 'hai-ba-trung', name: 'Cà Phê Thái', address: '27 Triệu Việt Vương', time: '6h30-22h', desc: 'Cà phê gia truyền từ 1926. Đậm đà thơm nồng đúng vị truyền thống.', icon: '☕', imgFile: 'q-cafe-thai.jpg', reviews: [{ name: 'Đình Bảo', text: 'Vị cà phê rang xay cổ truyền đậm chất Hà Nội.', avatar: 'https://i.pravatar.cc/150?img=12' }] },
+            { district: 'hai-ba-trung', name: 'Cơm 123', address: '55 phố Huế', time: '10h-21h', desc: 'Cơm bình dân đa dạng món gia đình chế biến đậm đà.', icon: '🍱', imgFile: 'q-com-123.jpg', reviews: [{ name: 'Thanh Hằng', text: 'Bữa trưa văn phòng nhanh gọn lẹ.', avatar: 'https://i.pravatar.cc/150?img=9' }] },
+            { district: 'hai-ba-trung', name: 'Cháo trai cô Hằng', address: '26 Trần Xuân Soạn', time: '15h-21h', desc: 'Cháo nhuyễn mịn, ngọt tự nhiên từ trai. Thịt trai dai thơm.', icon: '🥣', imgFile: 'q-chao-trai-hang.jpg', reviews: [{ name: 'Hoài Nam', text: 'Cháo chiều lót dạ tuyệt vời.', avatar: 'https://i.pravatar.cc/150?img=15' }] },
+            { district: 'hai-ba-trung', name: 'Tiệm bánh Hoan', address: '46 Trần Xuân Soạn', time: '6h-21h', desc: 'Bánh mì pate lâu đời. Vỏ giòn, nhân truyền thống giữ nguyên hương vị.', icon: '🥖', imgFile: 'q-banh-hoan.jpg', reviews: [{ name: 'Bảo Trần', text: 'Pate béo ngậy ăn không biết chán.', avatar: 'https://i.pravatar.cc/150?img=33' }] },
 
-            // VI. HOÀNG MAI (5 quán)
-            { district: 'hoang-mai', name: 'Mì vằn thắn Thành Vy', address: '157A Trương Định, Hoàng Mai', time: '5h30-14h, 17h-21h', desc: 'Nước dùng trong ngọt thanh, sợi mì dai mềm, hoành thánh và xá xíu đầy đặn.', icon: '🍜', reviews: [
-                { name: 'Lê Dũng', text: 'Sủi cảo tôm thịt mềm tan trong miệng. Bát mì thập cẩm có cả trứng cút luộc.', avatar: 'https://i.pravatar.cc/150?img=60' },
-                { name: 'Lan Hương', text: 'Nước dùng ngọt thanh từ xương, không bị lợ vị mì chính. Ăn xong không bị khô cổ.', avatar: 'https://i.pravatar.cc/150?img=10' },
-                { name: 'Minh Tuấn', text: 'Mì tươi dai giòn. Quán sạch sẽ, phục vụ chu đáo dù rất đông.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=MinhTuan' }
-            ]},
-            { district: 'hoang-mai', name: 'Lòng Ngon Hợp Lý', address: '24 Trần Nguyên Đán, Hoàng Mai', time: '6h30-22h', desc: 'Chuyên lòng luộc, dồi, dạ dày làm sạch sẽ, đậm vị.', icon: '🥢', reviews: [
-                { name: 'Đức Huy', text: 'Dồi sụn nướng ở đây siêu đỉnh. Thơm lừng mùi rau húng.', avatar: 'https://i.pravatar.cc/150?img=11' },
-                { name: 'Mai Linh', text: 'Lòng luộc trắng giòn sần sật, mắm tôm đánh sủi bọt pha rất ngon.', avatar: 'https://i.pravatar.cc/150?img=1' },
-                { name: 'Hải Đăng', text: 'Lẩu cháo lòng bao no bao ngon. Anh em Hoàng Mai nên thử.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=HaiDang' }
-            ]},
-            { district: 'hoang-mai', name: 'Bông ốc Hải Phòng', address: '71 vành đai 2.5 Định Công, Hoàng Mai', time: 'Cả ngày', desc: 'Ốc tươi xào sả ớt đậm đà phong vị đất Cảng.', icon: '🐌', reviews: [
-                { name: 'Hà Phương', text: 'Hương vị cay nồng chuẩn Hải Phòng. Ốc hương sốt trứng muối đỉnh cao.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Tuấn Đạt', text: 'Càng cúng rang muối ớt siêu cay siêu ngon. Nhậu tới bến.', avatar: 'https://i.pravatar.cc/150?img=12' },
-                { name: 'Cẩm Tú', text: 'Không gian vỉa hè thoáng mát, giá rẻ hơn phố cổ nhiều.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=CamTu' }
-            ]},
-            { district: 'hoang-mai', name: 'Lẩu riêu Thanh Vũ', address: 'ô 11 lô TT 6C Tây Nam Linh Đàm, Hoàng Mai', time: '10h-22h', desc: 'Lẩu riêu cua chua thanh nhẹ, đồ nhúng thịt bò đậu bún phong phú.', icon: '🍲', reviews: [
-                { name: 'Thành Long', text: 'Nước lẩu thơm mùi dấm bỗng rất cuốn. Gạch cua xào hành phi béo ngậy.', avatar: 'https://i.pravatar.cc/150?img=13' },
-                { name: 'Thùy Linh', text: 'Đồ nhúng lẩu tươi ngon, không gian rộng rãi có chỗ đỗ ô tô.', avatar: 'https://i.pravatar.cc/150?img=9' },
-                { name: 'Quốc Bảo', text: 'Thịt bò bắp thái mỏng nhúng qua nước lẩu riêu cua là hết sẩy.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Bao' }
-            ]},
-            { district: 'hoang-mai', name: 'Cô Đan - sữa chua & caramen', address: '6 Ngõ Gốc Đề, Hoàng Mai', time: 'Sau 7h tối', desc: 'Sữa chua mịn, caramen béo thơm ăn kèm thạch trân châu.', icon: '🍮', reviews: [
-                { name: 'Hương Ly', text: 'Caramen cốt dừa núng nính cực ngon. Trân châu tự làm dẻo dai.', avatar: 'https://i.pravatar.cc/150?img=20' },
-                { name: 'Văn Tú', text: 'Giá rẻ, đồ ăn vặt buổi tối lý tưởng cho học sinh sinh viên.', avatar: 'https://i.pravatar.cc/150?img=14' },
-                { name: 'Nhật Nam', text: 'Mở muộn nên hay rủ bạn bè ra ăn đêm. Sữa chua nếp cẩm ngon.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Nam' }
-            ]},
+            // VI. HOÀNG MAI
+            { district: 'hoang-mai', name: 'Mì vằn thắn Thành Vy', address: '157A Trương Định', time: '5h30-14h, 17h-21h', desc: 'Nước dùng trong ngọt thanh, sợi mì dai mềm, hoành thánh và xá xíu đầy đặn.', icon: '🍜', imgFile: 'q-mi-thanh-vy.jpg', reviews: [{ name: 'Lê Dũng', text: 'Sủi cảo tôm thịt mềm tan trong miệng.', avatar: 'https://i.pravatar.cc/150?img=60' }] },
+            { district: 'hoang-mai', name: 'Lòng Ngon Hợp Lý', address: '24 Trần Nguyên Đán', time: '6h30-22h', desc: 'Chuyên lòng luộc, dồi, dạ dày làm sạch sẽ, đậm vị.', icon: '🥢', imgFile: 'q-long-ngon.jpg', reviews: [{ name: 'Đức Huy', text: 'Dồi sụn nướng ở đây siêu đỉnh.', avatar: 'https://i.pravatar.cc/150?img=11' }] },
+            { district: 'hoang-mai', name: 'Bông ốc Hải Phòng', address: '71 vành đai 2.5 Định Công', time: 'Cả ngày', desc: 'Ốc tươi xào sả ớt đậm đà phong vị đất Cảng.', icon: '🐌', imgFile: 'q-bong-oc.jpg', reviews: [{ name: 'Hà Phương', text: 'Hương vị cay nồng chuẩn Hải Phòng.', avatar: 'https://i.pravatar.cc/150?img=5' }] },
+            { district: 'hoang-mai', name: 'Lẩu riêu Thanh Vũ', address: 'ô 11 lô TT 6C Tây Nam Linh Đàm', time: '10h-22h', desc: 'Lẩu riêu cua chua thanh nhẹ, đồ nhúng thịt bò đậu bún phong phú.', icon: '🍲', imgFile: 'q-lau-thanh-vu.jpg', reviews: [{ name: 'Thành Long', text: 'Nước lẩu thơm mùi dấm bỗng rất cuốn.', avatar: 'https://i.pravatar.cc/150?img=13' }] },
+            { district: 'hoang-mai', name: 'Cô Đan - sữa chua & caramen', address: '6 Ngõ Gốc Đề', time: 'Sau 7h tối', desc: 'Sữa chua mịn, caramen béo thơm ăn kèm thạch trân châu.', icon: '🍮', imgFile: 'q-co-dan.jpg', reviews: [{ name: 'Hương Ly', text: 'Caramen cốt dừa núng nính cực ngon.', avatar: 'https://i.pravatar.cc/150?img=20' }] },
 
-            // VII. BA ĐÌNH (5 quán)
-            { district: 'ba-dinh', name: 'Bún cá Văn', address: '147 Quán Thánh, Ba Đình', time: '6:00 - 15:00', desc: 'Từng xuất hiện trên CNN. Cá to dày miếng, tôm ngọt, nước dùng chua ngọt thanh.', icon: '🐟', reviews: [
-                { name: 'David Lee', text: 'Amazing fish noodle soup! The broth is so flavorful and the fish is crispy.', avatar: 'https://i.pravatar.cc/150?img=68' },
-                { name: 'Diệu Nhi', text: 'Cá rán giòn tan, nước dùng chua thanh vị cà chua dứa. Quán ruột của mình.', avatar: 'https://i.pravatar.cc/150?img=1' },
-                { name: 'Hoàng Phong', text: 'Có thêm topping tôm xào và chả cá cực ngon. Giá nhỉnh hơn chỗ khác nhưng đáng tiền.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Phong' }
-            ]},
-            { district: 'ba-dinh', name: 'Phở Thế Béo', address: '16 Trần Tế Xương, Trúc Bạch, Ba Đình', time: '5:00 - 14:00', desc: 'Phở nạm sốt vang và phở lõi rùa trứ danh. Nước dùng trong, sợi phở mềm ướt.', icon: '🍜', reviews: [
-                { name: 'Minh Khang', text: 'Phở lõi bò siêu giòn và ngọt. Lần nào lên Hà Nội cũng phải ghé ăn.', avatar: 'https://i.pravatar.cc/150?img=11' },
-                { name: 'Bích Ngọc', text: 'Phở sốt vang đậm đà, thịt bò gân dẻo ngon. Nước phở màu đẹp.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Tuấn Đạt', text: 'Sợi phở mềm mướt, cho thêm tí tương ớt tự làm của quán là chuẩn bài.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Dat' }
-            ]},
-            { district: 'ba-dinh', name: 'Bún ốc bà Thoa', address: 'Ngõ 7 Liễu Giai, Cống Vị, Ba Đình', time: '7:00 - 19:00', desc: 'Nước dùng trong thơm, không pha riêu cua, giữ trọn vị ốc tinh túy.', icon: '🐌', reviews: [
-                { name: 'Cẩm Tú', text: 'Ốc nhồi to chà bá, cắn ngập răng. Nước dùng thanh không bị nồng.', avatar: 'https://i.pravatar.cc/150?img=10' },
-                { name: 'Thanh Tùng', text: 'Bún ốc nguội ăn giải nhiệt mùa hè siêu đã. Ốc giòn sần sật.', avatar: 'https://i.pravatar.cc/150?img=15' },
-                { name: 'Lan Anh', text: 'Mình cực thích mắm tôm ở đây, đánh sủi bọt chấm ốc luộc cũng ngon.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=LanAnh' }
-            ]},
-            { district: 'ba-dinh', name: 'Lò Bánh Bao', address: 'Số 5 Ngõ Tôn Thất Thiệp, Ba Đình', time: '5:30 - 19:00', desc: 'Gia truyền 25 năm. Vỏ thủ công xốp, nhân mộc nhĩ đậm đà trứng cút trứng muối.', icon: '🥟', reviews: [
-                { name: 'Quốc Bảo', text: 'Bánh bao trứng muối tan chảy béo ngậy. Mua 5 cái về ăn dần vẫn ngon.', avatar: 'https://i.pravatar.cc/150?img=12' },
-                { name: 'Mai Phương', text: 'Vỏ bánh mềm xốp, có mùi men chua nhẹ đặc trưng làm thủ công.', avatar: 'https://i.pravatar.cc/150?img=9' },
-                { name: 'Hải Nam', text: 'Quán trong ngõ hơi khó tìm nhưng bánh bao nhân thịt xá xíu cực phẩm.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Nam' }
-            ]},
-            { district: 'ba-dinh', name: 'Ốc Tùng Hói', address: '14 Tôn Thất Thiệp, Ba Đình', time: '15:00 - 20:00', desc: 'Ốc luộc truyền thống siêu tươi, xoài dầm khoai tây chiên ngon xuất sắc.', icon: '🐌', reviews: [
-                { name: 'Thu Hằng', text: 'Khoai tây chiên bơ tỏi ở đây là chân ái. Ốc luộc mập mạp.', avatar: 'https://i.pravatar.cc/150?img=16' },
-                { name: 'Trọng Khang', text: 'Ốc luộc mắm gừng sả ớt ngon nhức nách. Phục vụ siêu nhanh.', avatar: 'https://i.pravatar.cc/150?img=14' },
-                { name: 'Hương Giang', text: 'Xoài dầm chua ngọt ăn chống ngấy rất tốt. Ăn vỉa hè gió mát.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Giang' }
-            ]},
+            // VII. BA ĐÌNH
+            { district: 'ba-dinh', name: 'Bún cá Văn', address: '147 Quán Thánh', time: '6:00 - 15:00', desc: 'Từng xuất hiện trên CNN. Cá to dày miếng, tôm ngọt, nước dùng chua ngọt thanh.', icon: '🐟', imgFile: 'q-bun-ca-van.jpg', reviews: [{ name: 'David Lee', text: 'Amazing fish noodle soup!', avatar: 'https://i.pravatar.cc/150?img=68' }] },
+            { district: 'ba-dinh', name: 'Phở Thế Béo', address: '16 Trần Tế Xương, Trúc Bạch', time: '5:00 - 14:00', desc: 'Phở nạm sốt vang và phở lõi rùa trứ danh. Nước dùng trong, sợi phở mềm ướt.', icon: '🍜', imgFile: 'q-pho-the-beo.jpg', reviews: [{ name: 'Minh Khang', text: 'Phở lõi bò siêu giòn và ngọt.', avatar: 'https://i.pravatar.cc/150?img=11' }] },
+            { district: 'ba-dinh', name: 'Bún ốc bà Thoa', address: 'Ngõ 7 Liễu Giai, Cống Vị', time: '7:00 - 19:00', desc: 'Nước dùng trong thơm, không pha riêu cua, giữ trọn vị ốc tinh túy.', icon: '🐌', imgFile: 'q-bun-oc-thoa.jpg', reviews: [{ name: 'Cẩm Tú', text: 'Ốc nhồi to chà bá, cắn ngập răng.', avatar: 'https://i.pravatar.cc/150?img=10' }] },
+            { district: 'ba-dinh', name: 'Lò Bánh Bao', address: 'Số 5 Ngõ Tôn Thất Thiệp', time: '5:30 - 19:00', desc: 'Gia truyền 25 năm. Vỏ thủ công xốp, nhân mộc nhĩ đậm đà trứng cút trứng muối.', icon: '🥟', imgFile: 'q-lo-banh-bao.jpg', reviews: [{ name: 'Quốc Bảo', text: 'Bánh bao trứng muối tan chảy béo ngậy.', avatar: 'https://i.pravatar.cc/150?img=12' }] },
+            { district: 'ba-dinh', name: 'Ốc Tùng Hói', address: '14 Tôn Thất Thiệp', time: '15:00 - 20:00', desc: 'Ốc luộc truyền thống siêu tươi, xoài dầm khoai tây chiên ngon xuất sắc.', icon: '🐌', imgFile: 'q-oc-tung-hoi.jpg', reviews: [{ name: 'Thu Hằng', text: 'Khoai tây chiên bơ tỏi ở đây là chân ái.', avatar: 'https://i.pravatar.cc/150?img=16' }] },
 
-            // VIII. LONG BIÊN (5 quán)
-            { district: 'long-bien', name: 'Bún Dính', address: '26 P. Lâm Hạ, Bồ Đề, Long Biên', time: '5:45 - 13:00', desc: 'Bát bún viên mọc to chắc thịt, sườn sụn hầm mềm, lưỡi heo dày miếng chấm xì dầu.', icon: '🥣', reviews: [
-                { name: 'Hùng Sơn', text: 'Chấm thịt lưỡi với xì dầu tiêu xanh bao phê. Mọc giòn sần sật.', avatar: 'https://i.pravatar.cc/150?img=53' },
-                { name: 'Khánh Ly', text: 'Bún mọc dọc mùng nước dùng trong vắt thanh ngọt. Không gian sân vườn.', avatar: 'https://i.pravatar.cc/150?img=1' },
-                { name: 'Minh Tuấn', text: 'Phải đi ăn sớm vì 9h là quán hay hết những món ngon rồi.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Tuan' }
-            ]},
-            { district: 'long-bien', name: 'Bánh cuốn Phủ Lý', address: '149 Hoàng Như Tiếp, Long Biên', time: '7:00 - 14:00', desc: 'Chuẩn vị Hà Nam. Bánh mướt không nhân, thịt nướng than hoa tẩm ướp đậm đà.', icon: '🌮', reviews: [
-                { name: 'Mai Phương', text: 'Hành phi tự làm giòn rụm không bị khét. Nước mắm chua ngọt ấm.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Đức Huy', text: 'Bánh cuốn tráng tay mỏng mướt, chả nướng thơm lừng vị than hoa.', avatar: 'https://i.pravatar.cc/150?img=11' },
-                { name: 'Tuấn Phong', text: 'Chuẩn bánh cuốn Hà Nam. Ăn 1 suất là no bụng đến trưa.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Phong' }
-            ]},
-            { district: 'long-bien', name: 'Vịt cỏ Thành Luân', address: '23 Ng. 2 Phú Viên, Long Biên', time: '9:00 - 23:15', desc: 'Vịt chắc thịt thơm béo. Vịt nướng da giòn rụm, giá bình dân.', icon: '🦆', reviews: [
-                { name: 'Đức Phát', text: 'Nước chấm vịt nướng chua cay mặn ngọt chuẩn luôn. Thịt vịt ngọt.', avatar: 'https://i.pravatar.cc/150?img=33' },
-                { name: 'Thanh Trúc', text: 'Lẩu vịt om sấu ăn kèm rau nhút chua chua thanh thanh rất hợp mùa hè.', avatar: 'https://i.pravatar.cc/150?img=10' },
-                { name: 'Hoàng Lâm', text: 'Giá cả bình dân, quán rộng rãi thoáng mát. Ngồi nhậu rất vào.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Lam' }
-            ]},
-            { district: 'long-bien', name: 'Phở Chiến Gà', address: '8 P. Lệ Mật, Long Biên', time: '6:00 - 22:00', desc: 'Gà ta da giòn sần sật, nước dùng hầm xương thanh ngọt thơm mùi gừng hành.', icon: '🍜', reviews: [
-                { name: 'Hồng Hạnh', text: 'Thịt đùi gà giòn sần sật cực phẩm. Da gà vàng óng không mỡ.', avatar: 'https://i.pravatar.cc/150?img=9' },
-                { name: 'Thành Long', text: 'Phở gà trộn sốt chua ngọt lạ miệng. Bát phở nước thanh ngọt.', avatar: 'https://i.pravatar.cc/150?img=12' },
-                { name: 'Nhật Nam', text: 'Gà chặt bày đĩa nhìn hấp dẫn. Không gian quán sạchẽ.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=NhatNam' }
-            ]},
-            { district: 'long-bien', name: 'Tiệm bánh mì U Vân', address: '175 Đ. Ngọc Lâm, Long Biên', time: 'Mở cả ngày', desc: 'Vỏ nướng giòn rụm, nhân xá xíu pate béo ngậy. Có xôi thịt kho đậm đà.', icon: '🥖', reviews: [
-                { name: 'Khánh Toàn', text: 'Pate u Vân làm mềm và thơm nức. Cắn miếng bánh mì giòn tan.', avatar: 'https://i.pravatar.cc/150?img=15' },
-                { name: 'Hoài Giang', text: 'Bánh mì thập cẩm full topping ăn bao no. Cô bán hàng xởi lởi.', avatar: 'https://i.pravatar.cc/150?img=20' },
-                { name: 'Lê Dũng', text: 'Xôi pate thịt kho trứng ngon vô địch. Giá học sinh sinh viên.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=LeDung' }
-            ]},
+            // VIII. LONG BIÊN
+            { district: 'long-bien', name: 'Bún Dính', address: '26 P. Lâm Hạ, Bồ Đề', time: '5:45 - 13:00', desc: 'Bát bún viên mọc to chắc thịt, sườn sụn hầm mềm, lưỡi heo dày miếng chấm xì dầu.', icon: '🥣', imgFile: 'q-bun-dinh.jpg', reviews: [{ name: 'Hùng Sơn', text: 'Chấm thịt lưỡi với xì dầu tiêu xanh bao phê.', avatar: 'https://i.pravatar.cc/150?img=53' }] },
+            { district: 'long-bien', name: 'Bánh cuốn Phủ Lý', address: '149 Hoàng Như Tiếp', time: '7:00 - 14:00', desc: 'Chuẩn vị Hà Nam. Bánh mướt không nhân, thịt nướng than hoa tẩm ướp đậm đà.', icon: '🌮', imgFile: 'q-cuon-phu-ly.jpg', reviews: [{ name: 'Mai Phương', text: 'Hành phi tự làm giòn rụm không bị khét.', avatar: 'https://i.pravatar.cc/150?img=5' }] },
+            { district: 'long-bien', name: 'Vịt cỏ Thành Luân', address: '23 Ng. 2 Phú Viên', time: '9:00 - 23:15', desc: 'Vịt chắc thịt thơm béo. Vịt nướng da giòn rụm, giá bình dân.', icon: '🦆', imgFile: 'q-vit-thanh-luan.jpg', reviews: [{ name: 'Đức Phát', text: 'Nước chấm vịt nướng chua cay mặn ngọt chuẩn luôn.', avatar: 'https://i.pravatar.cc/150?img=33' }] },
+            { district: 'long-bien', name: 'Phở Chiến Gà', address: '8 P. Lệ Mật', time: '6:00 - 22:00', desc: 'Gà ta da giòn sần sật, nước dùng hầm xương thanh ngọt thơm mùi gừng hành.', icon: '🍜', imgFile: 'q-pho-chien-ga.jpg', reviews: [{ name: 'Hồng Hạnh', text: 'Thịt đùi gà giòn sần sật cực phẩm.', avatar: 'https://i.pravatar.cc/150?img=9' }] },
+            { district: 'long-bien', name: 'Tiệm bánh mì U Vân', address: '175 Đ. Ngọc Lâm', time: 'Mở cả ngày', desc: 'Vỏ nướng giòn rụm, nhân xá xíu pate béo ngậy. Có xôi thịt kho đậm đà.', icon: '🥖', imgFile: 'q-banh-mi-u-van.jpg', reviews: [{ name: 'Khánh Toàn', text: 'Pate u Vân làm mềm và thơm nức.', avatar: 'https://i.pravatar.cc/150?img=15' }] },
 
-            // IX. THANH XUÂN (5 quán)
-            { district: 'thanh-xuan', name: 'Phở bò Dũng', address: '232 P. Quan Nhân, Thanh Xuân', time: '5:00 - 21:00', desc: 'Thanh ngọt dậy mùi thơm gừng băm, thịt tái chín gầu thái vừa vặn.', icon: '🍜', reviews: [
-                { name: 'Văn Tú', text: 'Hương vị phở cổ truyền không pha tạp. Gừng băm làm phở dậy mùi.', avatar: 'https://i.pravatar.cc/150?img=14' },
-                { name: 'Bảo Trần', text: 'Nước dùng phở bò Dũng ăn xong không bị khát nước. Rất ưng.', avatar: 'https://i.pravatar.cc/150?img=60' },
-                { name: 'Tuyết Mai', text: 'Thịt bò gầu giòn, bát phở đầy đặn. Quán nhỏ nhưng tấp nập.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=TuyetMai' }
-            ]},
-            { district: 'thanh-xuan', name: 'Bún đậu mẹt cô Chinh', address: '132/5 Đ. Nguyễn Trãi, Thanh Xuân', time: '10:00 - 21:00', desc: 'Mẹt bún siêu đầy đặn, đậu vàng giòn ngoài mềm trong, dồi sụn sần sật.', icon: '🥢', reviews: [
-                { name: 'Lan Anh', text: 'Đậu rán phồng giòn rụm, mắm tôm không bị mặn gắt. Đánh chanh sủi bọt tưng bừng.', avatar: 'https://i.pravatar.cc/150?img=1' },
-                { name: 'Hoàng Phong', text: 'Dồi sụn chiên thái miếng dày cắn ngập miệng. Ăn 1 mẹt no lặc lè.', avatar: 'https://i.pravatar.cc/150?img=11' },
-                { name: 'Cẩm Lệ', text: 'Chả cốm dẻo thơm, thịt chân giò thái mỏng mỡ màng. Quán sinh viên giá rẻ.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=CamLe' }
-            ]},
-            { district: 'thanh-xuan', name: 'Mr. Lòng', address: 'Số 43, Ngõ 21 Lê Văn Lương, Thanh Xuân', time: '10:00 - 14:00', desc: 'Lòng trần nóng hổi chấm mắm tôm đánh chanh ớt trong không gian Hà Nội xưa.', icon: '🥘', reviews: [
-                { name: 'Bảo Cường', text: 'Quán siêu sạch sẽ, lòng trắng giòn. Ăn không lo đau bụng.', avatar: 'https://i.pravatar.cc/150?img=13' },
-                { name: 'Diễm Hương', text: 'Lòng dồi nướng than hoa thơm lừng. Phục vụ chuyên nghiệp lịch sự.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Hải Nam', text: 'Bát cháo lòng tiết canh chuẩn vị. Không gian decor kiểu xưa rất đẹp.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=HaiNam' }
-            ]},
-            { district: 'thanh-xuan', name: 'Cơm Tấm Đêe', address: '199 P. Vũ Tông Phan, Thanh Xuân', time: '10:30-14:00, 17:30-21:00', desc: 'Sườn nướng tẩm ướp khéo mềm mọng. Nước mắm kẹo ngọt cay chuẩn Sài Gòn.', icon: '🍚', reviews: [
-                { name: 'Ngọc Lan', text: 'Sườn cốt lết dày cộp nướng cháy xém ngon lắm. Nước mắm kẹo đặc sệt.', avatar: 'https://i.pravatar.cc/150?img=10' },
-                { name: 'Đức Huy', text: 'Cơm tấm dẻo tơi, chả trứng hấp mềm mịn. Đồ chua làm ăn rất bắt cơm.', avatar: 'https://i.pravatar.cc/150?img=12' },
-                { name: 'Mai Phương', text: 'Cơm tấm chuẩn vị Sài Gòn. Tầng 2 có điều hòa mát mẻ.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=MaiPhuong' }
-            ]},
-            { district: 'thanh-xuan', name: 'Bếp Mẹ Đăng', address: '38 P. Nhân Hòa, Thanh Xuân', time: '11:00 - 22:30', desc: 'Thiên đường ốc và chân gà rút xương, nước chấm pha chuẩn vị Bắc.', icon: '🐌', reviews: [
-                { name: 'Thùy Linh', text: 'Chân gà sả tắc ngâm vừa miệng, giòn tan. Mắm quất chua cay ngon tuyệt.', avatar: 'https://i.pravatar.cc/150?img=16' },
-                { name: 'Thu Thảo', text: 'Ốc hương xào me chua chua ngọt ngọt mút ngón tay luôn.', avatar: 'https://i.pravatar.cc/150?img=9' },
-                { name: 'Trọng Khang', text: 'Ốc bươu nướng tiêu xanh cay nồng. Nhậu lai rai buổi tối hết sẩy.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Khang' }
-            ]},
+            // IX. THANH XUÂN
+            { district: 'thanh-xuan', name: 'Phở bò Dũng', address: '232 P. Quan Nhân', time: '5:00 - 21:00', desc: 'Thanh ngọt dậy mùi thơm gừng băm, thịt tái chín gầu thái vừa vặn.', icon: '🍜', imgFile: 'q-pho-dung.jpg', reviews: [{ name: 'Văn Tú', text: 'Hương vị phở cổ truyền không pha tạp.', avatar: 'https://i.pravatar.cc/150?img=14' }] },
+            { district: 'thanh-xuan', name: 'Bún đậu mẹt cô Chinh', address: '132/5 Đ. Nguyễn Trãi', time: '10:00 - 21:00', desc: 'Mẹt bún siêu đầy đặn, đậu vàng giòn ngoài mềm trong, dồi sụn sần sật.', icon: '🥢', imgFile: 'q-bun-dau-chinh.jpg', reviews: [{ name: 'Lan Anh', text: 'Đậu rán phồng giòn rụm, mắm tôm không bị mặn gắt.', avatar: 'https://i.pravatar.cc/150?img=1' }] },
+            { district: 'thanh-xuan', name: 'Mr. Lòng', address: 'Số 43, Ngõ 21 Lê Văn Lương', time: '10:00 - 14:00', desc: 'Lòng trần nóng hổi chấm mắm tôm đánh chanh ớt trong không gian Hà Nội xưa.', icon: '🥘', imgFile: 'q-mr-long.jpg', reviews: [{ name: 'Bảo Cường', text: 'Quán siêu sạch sẽ, lòng trắng giòn.', avatar: 'https://i.pravatar.cc/150?img=13' }] },
+            { district: 'thanh-xuan', name: 'Cơm Tấm Đêe', address: '199 P. Vũ Tông Phan', time: '10:30-14:00, 17:30-21:00', desc: 'Sườn nướng tẩm ướp khéo mềm mọng. Nước mắm kẹo ngọt cay chuẩn Sài Gòn.', icon: '🍚', imgFile: 'q-com-tam-dee.jpg', reviews: [{ name: 'Ngọc Lan', text: 'Sườn cốt lết dày cộp nướng cháy xém ngon lắm.', avatar: 'https://i.pravatar.cc/150?img=10' }] },
+            { district: 'thanh-xuan', name: 'Bếp Mẹ Đăng', address: '38 P. Nhân Hòa', time: '11:00 - 22:30', desc: 'Thiên đường ốc và chân gà rút xương, nước chấm pha chuẩn vị Bắc.', icon: '🐌', imgFile: 'q-bep-me-dang.jpg', reviews: [{ name: 'Thùy Linh', text: 'Chân gà sả tắc ngâm vừa miệng, giòn tan.', avatar: 'https://i.pravatar.cc/150?img=16' }] },
 
-            // X. ĐỐNG ĐA (5 quán)
-            { district: 'dong-da', name: 'Mì Chinh', address: '7 Ng. Hàng Cháo, Đống Đa', time: '7:00 - 12:00', desc: 'Topping tim cật tươi rói giòn ngọt, mỳ xào giòn sốt đậm đà.', icon: '🍜', reviews: [
-                { name: 'Phú Trọng', text: 'Mỳ xào tim cật sốt nấm xuất sắc. Cật làm sạch không hề hôi.', avatar: 'https://i.pravatar.cc/150?img=15' },
-                { name: 'Cẩm Tú', text: 'Mì xào giòn rụm, sốt sánh quyện đậm đà. Ăn sáng là no đến trưa.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Lê Dũng', text: 'Quán trong ngõ rộng, để xe thoải mái. Mì nước cũng rất ngọt thanh.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Dung' }
-            ]},
-            { district: 'dong-da', name: 'Bánh Mì 35', address: '35 P. Thái Thịnh, Đống Đa', time: '6:30 - 21:30', desc: 'Bánh mì chảo truyền thống. Pate béo ngậy, sốt vang bò gân hầm mềm.', icon: '🍳', reviews: [
-                { name: 'Thanh Phương', text: 'Sốt vang đậm đà chấm bánh mì bao no. Bò gân hầm nhừ.', avatar: 'https://i.pravatar.cc/150?img=10' },
-                { name: 'Tuấn Đạt', text: 'Pate áp chảo xèo xèo thơm nức mũi. Trứng ốp lòng đào béo ngậy.', avatar: 'https://i.pravatar.cc/150?img=11' },
-                { name: 'Khánh Ly', text: 'Hương vị bao năm không đổi. Mình ăn từ bé đến lớn.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=KhánhLy' }
-            ]},
-            { district: 'dong-da', name: 'Chả cá Lão Ngư', address: '171 P. Thái Hà, Đống Đa', time: '10:00 - 22:30', desc: 'Cá Lăng tươi chiên chảo gang, lòng cá giòn sần sật. Cháo cá tào phớ miễn phí.', icon: '🐟', reviews: [
-                { name: 'Hoài Giang', text: 'Thịt cá lăng mềm ngọt không bị bở. Lòng cá giòn dai nhai sướng miệng.', avatar: 'https://i.pravatar.cc/150?img=20' },
-                { name: 'Lan Hương', text: 'Mắm tôm pha vừa miệng, không bị nặng mùi. Rau thì là xanh mướt.', avatar: 'https://i.pravatar.cc/150?img=1' },
-                { name: 'Nhật Nam', text: 'Cuối bữa có cháo cá và tào phớ ăn tráng miệng free cực kì chu đáo.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Nam' }
-            ]},
-            { district: 'dong-da', name: 'Bánh đúc nóng Trung Tự', address: '103B5 ngõ 46C Phạm Ngọc Thạch, Đống Đa', time: '10:00 - 20:00', desc: 'Bột bánh mịn mượt lụa là, thịt băm hành phi vàng ruộm, nước mắm thanh.', icon: '🥣', reviews: [
-                { name: 'Tuyết Mai', text: 'Bánh đúc tuổi thơ, ăn là nhớ. Bột bánh núng nính, mắm mặn ngọt chan hòa.', avatar: 'https://i.pravatar.cc/150?img=9' },
-                { name: 'Quang Dũng', text: 'Thêm tí ớt chưng vào bánh đúc nóng ăn cay cay ấm bụng chiều đông.', avatar: 'https://i.pravatar.cc/150?img=12' },
-                { name: 'Bảo Trần', text: 'Thịt băm xào mộc nhĩ nhiều ú ụ. Ăn 2 bát mới đã cơn thèm.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=BaoTran' }
-            ]},
-            { district: 'dong-da', name: 'Phở Hiếu', address: '79 Ng.Thổ Quan, Đống Đa', time: '19:00 - 3:00', desc: 'Cứu đói đêm khuya. Phở sốt vang đầy đặn thơm mùi quế hồi.', icon: '🍜', reviews: [
-                { name: 'Tuấn Anh', text: 'Bát phở 30k mà ú ụ thịt. Ăn đêm Khâm Thiên thì nhất định phải ghé.', avatar: 'https://i.pravatar.cc/150?img=33' },
-                { name: 'Bích Ngọc', text: 'Nước dùng đậm đà sực mùi hoa hồi quế. Quẩy giòn chấm nước sốt vang ngon.', avatar: 'https://i.pravatar.cc/150?img=16' },
-                { name: 'Thành Long', text: 'Phở trộn gà ở đây cũng ngon không kém. Bán đến mờ sáng.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=ThanhLong' }
-            ]},
+            // X. ĐỐNG ĐA
+            { district: 'dong-da', name: 'Mì Chinh', address: '7 Ng. Hàng Cháo', time: '7:00 - 12:00', desc: 'Topping tim cật tươi rói giòn ngọt, mỳ xào giòn sốt đậm đà.', icon: '🍜', imgFile: 'q-mi-chinh.jpg', reviews: [{ name: 'Phú Trọng', text: 'Mỳ xào tim cật sốt nấm xuất sắc.', avatar: 'https://i.pravatar.cc/150?img=15' }] },
+            { district: 'dong-da', name: 'Bánh Mì 35', address: '35 P. Thái Thịnh', time: '6:30 - 21:30', desc: 'Bánh mì chảo truyền thống. Pate béo ngậy, sốt vang bò gân hầm mềm.', icon: '🍳', imgFile: 'q-banh-mi-35.jpg', reviews: [{ name: 'Thanh Phương', text: 'Sốt vang đậm đà chấm bánh mì bao no.', avatar: 'https://i.pravatar.cc/150?img=10' }] },
+            { district: 'dong-da', name: 'Chả cá Lão Ngư', address: '171 P. Thái Hà', time: '10:00 - 22:30', desc: 'Cá Lăng tươi chiên chảo gang, lòng cá giòn sần sật. Cháo cá tào phớ miễn phí.', icon: '🐟', imgFile: 'q-cha-ca-lao-ngu.jpg', reviews: [{ name: 'Hoài Giang', text: 'Thịt cá lăng mềm ngọt không bị bở.', avatar: 'https://i.pravatar.cc/150?img=20' }] },
+            { district: 'dong-da', name: 'Bánh đúc nóng Trung Tự', address: '103B5 ngõ 46C Phạm Ngọc Thạch', time: '10:00 - 20:00', desc: 'Bột bánh mịn mượt lụa là, thịt băm hành phi vàng ruộm, nước mắm thanh.', icon: '🥣', imgFile: 'q-banh-duc.jpg', reviews: [{ name: 'Tuyết Mai', text: 'Bánh đúc tuổi thơ, ăn là nhớ.', avatar: 'https://i.pravatar.cc/150?img=9' }] },
+            { district: 'dong-da', name: 'Phở Hiếu', address: '79 Ng.Thổ Quan', time: '19:00 - 3:00', desc: 'Cứu đói đêm khuya. Phở sốt vang đầy đặn thơm mùi quế hồi.', icon: '🍜', imgFile: 'q-pho-hieu.jpg', reviews: [{ name: 'Tuấn Anh', text: 'Bát phở 30k mà ú ụ thịt.', avatar: 'https://i.pravatar.cc/150?img=33' }] },
 
-            // XI. HÀ ĐÔNG (3 quán)
-            { district: 'ha-dong', name: 'Nét Cuốn', address: '30 P. Nguyễn Văn Lộc, Hà Đông', time: '10:00-14:00, 17:00-22:00', desc: 'Cuốn thanh đạm, rau sống đa dạng. Nem lụi, phở cuốn tươi ngon đậm đà.', icon: '🌯', reviews: [
-                { name: 'Diễm Hương', text: 'Rau sạch, không gian thoáng mát. Bánh tráng cuốn thịt heo rất dễ ăn.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Thanh Hằng', text: 'Nem lụi nướng sả thơm lừng, chấm tương đậu bùi bùi ngon tuyệt.', avatar: 'https://i.pravatar.cc/150?img=10' },
-                { name: 'Minh Tuấn', text: 'Quán sạch sẽ, điều hòa mát rượi. Đổi gió bữa trưa văn phòng rất hợp.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Tuan' }
-            ]},
-            { district: 'ha-dong', name: 'Kem dừa Mã Lai Tea & Coffee', address: 'LK25 P. Lê Lai, Hà Đông', time: 'Cả ngày', desc: 'Kem dừa dẻo mịn ngọt thanh trong gáo dừa kèm dừa nạo và lạc rang.', icon: '🥥', reviews: [
-                { name: 'Quốc Huy', text: 'Kem béo ngậy mà không ngọt gắt. Ăn trong gáo dừa kèm xôi rất xịn.', avatar: 'https://i.pravatar.cc/150?img=13' },
-                { name: 'Mai Phương', text: 'Nước dừa tươi ngọt mát uống kèm kem dừa rất hợp. View quán đẹp.', avatar: 'https://i.pravatar.cc/150?img=1' },
-                { name: 'Hương Ly', text: 'Bít tết chảo gang ở đây cũng rất đáng thử. Giá sinh viên cực kì.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Ly' }
-            ]},
-            { district: 'ha-dong', name: 'Phở gà Hương', address: '430 Đường Vạn Phúc, Hà Đông', time: 'Sáng và trưa', desc: 'Nước dùng trong vắt thanh ngọt, gà ta chắc thịt da vàng sần sật.', icon: '🍜', reviews: [
-                { name: 'Hồng Nhung', text: 'Phở mọc gà giòn ngon. Nước dùng thanh ngọt mùi xương gà.', avatar: 'https://i.pravatar.cc/150?img=9' },
-                { name: 'Hùng Sơn', text: 'Quán đông nhưng phục vụ nhanh. Gà ta chuẩn thịt chắc, da giòn.', avatar: 'https://i.pravatar.cc/150?img=14' },
-                { name: 'Tuấn Đạt', text: 'Bát phở đầy đặn, thêm lá chanh thái sợi thơm nức mũi.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Dat' }
-            ]},
+            // XI. HÀ ĐÔNG
+            { district: 'ha-dong', name: 'Nét Cuốn', address: '30 P. Nguyễn Văn Lộc', time: '10:00-14:00, 17:00-22:00', desc: 'Cuốn thanh đạm, rau sống đa dạng. Nem lụi, phở cuốn tươi ngon đậm đà.', icon: '🌯', imgFile: 'q-net-cuon.jpg', reviews: [{ name: 'Diễm Hương', text: 'Rau sạch, không gian thoáng mát.', avatar: 'https://i.pravatar.cc/150?img=5' }] },
+            { district: 'ha-dong', name: 'Kem dừa Mã Lai Tea & Coffee', address: 'LK25 P. Lê Lai', time: 'Cả ngày', desc: 'Kem dừa dẻo mịn ngọt thanh trong gáo dừa kèm dừa nạo và lạc rang.', icon: '🥥', imgFile: 'q-kem-dua.jpg', reviews: [{ name: 'Quốc Huy', text: 'Kem béo ngậy mà không ngọt gắt.', avatar: 'https://i.pravatar.cc/150?img=13' }] },
+            { district: 'ha-dong', name: 'Phở gà Hương', address: '430 Đường Vạn Phúc', time: 'Sáng và trưa', desc: 'Nước dùng trong vắt thanh ngọt, gà ta chắc thịt da vàng sần sật.', icon: '🍜', imgFile: 'q-pho-ga-huong.jpg', reviews: [{ name: 'Hồng Nhung', text: 'Phở mọc gà giòn ngon.', avatar: 'https://i.pravatar.cc/150?img=9' }] },
 
-            // XII. TÂY HỒ (5 quán)
-            { district: 'tay-ho', name: 'Bánh cuốn nóng Thụy Khuê', address: 'Ngõ 29, Thuỵ Khuê, Tây Hồ', time: '06:30–12:00', desc: 'Tráng tay mướt mịn thơm gạo, nước chấm thanh tao ăn kèm chả quế.', icon: '🌮', reviews: [
-                { name: 'Hoàng Phong', text: 'Bánh cuốn nấm mộc nhĩ siêu nhiều nhân. Bánh mỏng tang, mướt rượt.', avatar: 'https://i.pravatar.cc/150?img=33' },
-                { name: 'Thu Thảo', text: 'Nước chấm chả quế nóng hổi vừa thổi vừa ăn. Cô tráng bánh thoăn thoắt.', avatar: 'https://i.pravatar.cc/150?img=1' },
-                { name: 'Quang Dũng', text: 'Bánh cuốn trứng lòng đào béo ngậy. Chỗ ngồi vỉa hè ngõ nhỏ đậm chất Hà Nội.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=Dung' }
-            ]},
-            { district: 'tay-ho', name: 'Quán bò nầm nướng cô Thảo', address: '74 Vũ Miên, Tây Hồ', time: 'Cả ngày', desc: 'Bò nầm tươi nướng bơ sốt me đậm đà, view Hồ Tây lãng mạn.', icon: '🥩', reviews: [
-                { name: 'Cẩm Lệ', text: 'Ngồi lề đường nướng thịt xèo xèo ngắm hoàng hôn hồ Tây cực chill.', avatar: 'https://i.pravatar.cc/150?img=5' },
-                { name: 'Khánh Toàn', text: 'Sốt me chua ngọt chấm bánh mì nướng bơ ngon bá cháy. Nầm bò nướng giòn.', avatar: 'https://i.pravatar.cc/150?img=53' },
-                { name: 'Linh Trang', text: 'Gió hồ mát rượi, đồ ăn ướp đậm đà. Có điều cuối tuần phải đợi bàn hơi lâu.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Trang' }
-            ]},
-            { district: 'tay-ho', name: 'Bún chả Ngọc Xuân', address: '102 Đ. Thụy Khuê, Tây Hồ', time: '7:00 - 16:00', desc: 'Chả thái đều tay cháy cạnh thơm nức, chả băm tẩm ướp bí truyền.', icon: '🥢', reviews: [
-                { name: 'Hải Đăng', text: 'Quán sạch sẽ điều hòa mát rượi. Bún chả ngon, thịt nướng than hoa.', avatar: 'https://i.pravatar.cc/150?img=15' },
-                { name: 'Tiến Đạt', text: 'Nem cua bể vỏ giòn tan nhân thịt cua đầy đặn. Nước mắm pha thanh.', avatar: 'https://i.pravatar.cc/150?img=12' },
-                { name: 'Thanh Hằng', text: 'Chả miếng cháy cạnh ngấm gia vị. Giá hơi cao nhưng xứng đáng.', avatar: 'https://api.dicebear.com/7.x/adventurer/svg?seed=Hang' }
-            ]},
-            { district: 'tay-ho', name: 'Quán Kiến', address: '3/39 ngõ 76 An Dương, Tây Hồ', time: '10:00 - 22:30', desc: 'Nhà sàn Tây Bắc. Đặc sản xôi trứng kiến, bọ cạp chiên, thịt ngựa nướng.', icon: '🦂', reviews: [
-                { name: 'Trọng Khang', text: 'Rượu hoa quả ngâm rất êm, mồi nhậu bén. Bọ cạp chiên giòn ăn bùi bùi.', avatar: 'https://i.pravatar.cc/150?img=60' },
-                { name: 'Hải Nam', text: 'Các món côn trùng chiên giòn ăn thử rất lạ miệng. Gà nướng mắc khén ngon.', avatar: 'https://i.pravatar.cc/150?img=11' },
-                { name: 'Bích Ngọc', text: 'Không gian nhà sàn mát mẻ, xôi trứng kiến dẻo ngậy. Phục vụ chu đáo.', avatar: 'https://api.dicebear.com/7.x/bottts/svg?seed=BichNgoc' }
-            ]},
-            { district: 'tay-ho', name: 'Nhà Hàng Bánh Tôm Hồ Tây', address: 'Số 1 Thanh Niên, Tây Hồ', time: '9:00 - 21:00', desc: 'Bánh tôm giòn rụm tôm tươi rói, view lộng gió hoàng hôn Hồ Tây.', icon: '🦐', reviews: [
-                { name: 'Kim Dung', text: 'Tôm to thịt chắc cắn ngập miệng. Bột bánh giòn tan không bị ngấy mỡ.', avatar: 'https://i.pravatar.cc/150?img=10' },
-                { name: 'Ngọc Lan', text: 'Vừa ăn bánh tôm vừa ngắm hoàng hôn Hồ Tây lãng mạn. Quán sang trọng.', avatar: 'https://i.pravatar.cc/150?img=16' },
-                { name: 'Phạm Hùng', text: 'Món ăn truyền thống Hà Nội dắt khách phương xa đến là chuẩn bài.', avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Hung' }
-            ]}
+            // XII. TÂY HỒ
+            { district: 'tay-ho', name: 'Bánh cuốn nóng Thụy Khuê', address: 'Ngõ 29, Thuỵ Khuê', time: '06:30–12:00', desc: 'Tráng tay mướt mịn thơm gạo, nước chấm thanh tao ăn kèm chả quế.', icon: '🌮', imgFile: 'q-cuon-thuy-khue.jpg', reviews: [{ name: 'Hoàng Phong', text: 'Bánh cuốn nấm mộc nhĩ siêu nhiều nhân.', avatar: 'https://i.pravatar.cc/150?img=33' }] },
+            { district: 'tay-ho', name: 'Quán bò nầm nướng cô Thảo', address: '74 Vũ Miên', time: 'Cả ngày', desc: 'Bò nầm tươi nướng bơ sốt me đậm đà, view Hồ Tây lãng mạn.', icon: '🥩', imgFile: 'q-bo-nam-thao.jpg', reviews: [{ name: 'Cẩm Lệ', text: 'Ngồi lề đường nướng thịt xèo xèo ngắm hoàng hôn hồ Tây cực chill.', avatar: 'https://i.pravatar.cc/150?img=5' }] },
+            { district: 'tay-ho', name: 'Bún chả Ngọc Xuân', address: '102 Đ. Thụy Khuê', time: '7:00 - 16:00', desc: 'Chả thái đều tay cháy cạnh thơm nức, chả băm tẩm ướp bí truyền.', icon: '🥢', imgFile: 'q-bun-cha-ngoc-xuan.jpg', reviews: [{ name: 'Hải Đăng', text: 'Quán sạch sẽ điều hòa mát rượi.', avatar: 'https://i.pravatar.cc/150?img=15' }] },
+            { district: 'tay-ho', name: 'Quán Kiến', address: '3/39 ngõ 76 An Dương', time: '10:00 - 22:30', desc: 'Nhà sàn Tây Bắc. Đặc sản xôi trứng kiến, bọ cạp chiên, thịt ngựa nướng.', icon: '🦂', imgFile: 'q-quan-kien.jpg', reviews: [{ name: 'Trọng Khang', text: 'Rượu hoa quả ngâm rất êm, mồi nhậu bén.', avatar: 'https://i.pravatar.cc/150?img=60' }] },
+            { district: 'tay-ho', name: 'Nhà Hàng Bánh Tôm Hồ Tây', address: 'Số 1 Thanh Niên', time: '9:00 - 21:00', desc: 'Bánh tôm giòn rụm tôm tươi rói, view lộng gió hoàng hôn Hồ Tây.', icon: '🦐', imgFile: 'q-banh-tom-ho-tay.jpg', reviews: [{ name: 'Kim Dung', text: 'Tôm to thịt chắc cắn ngập miệng.', avatar: 'https://i.pravatar.cc/150?img=10' }] }
         ];
 
         let currentlyDisplayed = 6;
@@ -1193,6 +960,9 @@
                 const mapQuery = encodeURIComponent(`${item.name}, ${item.address}, Hà Nội`);
                 const mapLink = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
                 
+                // Link placeholder hiển thị tên file yêu cầu
+                const placeholderUrl = `https://placehold.co/600x400/f3f4f6/a1a1aa?text=Chua+co+anh:\\n${item.imgFile}`;
+
                 let currentReviews = item.reviews;
                 if (!currentReviews || currentReviews.length < 3) {
                     currentReviews = [
@@ -1235,6 +1005,8 @@
                 
                 const cardHTML = `
                     <div class="searchable-item flex flex-col p-5 md:p-6 rounded-3xl border border-gray-100 hover:shadow-xl transition-shadow bg-white gap-5">
+                        
+                        <!-- Header thông tin quán -->
                         <div class="flex items-start gap-4">
                             <div class="w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-brand-orange/10 flex items-center justify-center text-2xl md:text-3xl flex-shrink-0 shadow-sm">
                                 ${item.icon}
@@ -1253,17 +1025,33 @@
                             </div>
                         </div>
 
-                        <div class="w-full h-[220px] rounded-2xl overflow-hidden border border-gray-200 relative bg-gray-100">
-                            <iframe 
-                                width="100%" 
-                                height="100%" 
-                                frameborder="0" style="border:0"
-                                loading="lazy"
-                                src="https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed">
-                            </iframe>
+                        <!-- LƯỚI 2 CỘT: Ảnh món ăn bên trái, Bản đồ bên phải -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Cột Ảnh món ăn -->
+                            <div class="w-full h-[200px] rounded-2xl overflow-hidden border border-gray-200 relative bg-gray-100 group">
+                                <img src="${item.imgFile}" alt="${item.name}" class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110" onerror="this.onerror=null; this.src='${placeholderUrl}'">
+                                <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1.5 rounded-lg text-[11px] font-bold text-brand-orange flex items-center gap-1.5 shadow-sm pointer-events-none">
+                                    <i data-lucide="image" class="w-3.5 h-3.5"></i> Hình ảnh thực tế
+                                </div>
+                            </div>
+
+                            <!-- Cột Bản đồ Google (Iframe) -->
+                            <div class="w-full h-[200px] rounded-2xl overflow-hidden border border-gray-200 relative bg-gray-100">
+                                <iframe 
+                                    width="100%" 
+                                    height="100%" 
+                                    frameborder="0" style="border:0"
+                                    loading="lazy"
+                                    src="https://maps.google.com/maps?q=${mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed">
+                                </iframe>
+                                <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1.5 rounded-lg text-[11px] font-bold text-blue-500 flex items-center gap-1.5 shadow-sm pointer-events-none">
+                                    <i data-lucide="map" class="w-3.5 h-3.5"></i> Bản đồ Google
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="bg-gray-50/80 rounded-2xl p-4 border border-gray-100">
+                        <!-- Reviews -->
+                        <div class="bg-gray-50/80 rounded-2xl p-4 border border-gray-100 mt-2">
                             <div class="flex items-center justify-between mb-3">
                                 <h4 class="font-bold text-xs md:text-sm text-gray-800 flex items-center gap-2">
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" class="w-4 h-4"> Đánh giá của thực khách
