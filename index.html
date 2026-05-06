@@ -107,6 +107,29 @@
             overflow: hidden;
         }
 
+        /* Navbar Hover Effect (Hiệu ứng gạch chân chạy mượt) - ĐÃ SỬA LỖI */
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #e89a3c;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .nav-link:hover {
+            color: #e89a3c !important;
+        }
+
         /* Animations cho Modal & Toast */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px) scale(0.95); }
@@ -145,13 +168,14 @@
                     </span>
                 </div>
 
+                <!-- NAV LINKS ĐÃ XÓA CLASS ACTIVE -->
                 <div class="hidden md:flex space-x-8">
-                    <a href="#" class="text-brand-orange font-bold border-b-2 border-brand-orange pb-1">Trang chủ</a>
-                    <a href="#benefits" class="text-gray-500 hover:text-brand-orange font-bold transition-colors">Về chúng tôi</a>
-                    <a href="#blog-section" class="text-gray-500 hover:text-brand-orange font-bold transition-colors">Blog Ẩm thực</a>
-                    <a href="#directory" class="text-gray-500 hover:text-brand-orange font-bold transition-colors">Bản đồ</a>
-                    <a href="#join-us" class="text-gray-500 hover:text-brand-orange font-bold transition-colors">Join With Us</a>
-                    <a href="#contact" class="text-gray-500 hover:text-brand-orange font-bold transition-colors">Liên hệ</a>
+                    <a href="#" class="nav-link font-bold text-gray-500 transition-colors">Trang chủ</a>
+                    <a href="#benefits" class="nav-link font-bold text-gray-500 transition-colors">Về chúng tôi</a>
+                    <a href="#blog-section" class="nav-link font-bold text-gray-500 transition-colors">Blog Ẩm thực</a>
+                    <a href="#directory" class="nav-link font-bold text-gray-500 transition-colors">Bản đồ</a>
+                    <a href="#join-us" class="nav-link font-bold text-gray-500 transition-colors">Join With Us</a>
+                    <a href="#contact" class="nav-link font-bold text-gray-500 transition-colors">Liên hệ</a>
                 </div>
                 <div class="flex items-center space-x-4">
                     <button onclick="openAuthModal()" class="bg-brand-orange hover:bg-brand-orangeDark text-white font-bold py-2 px-6 rounded-full transition-all shadow-md hover:shadow-float">Đăng Nhập</button>
@@ -309,20 +333,18 @@
                 <div class="sticky top-28">
                     <h2 class="text-2xl font-black text-brand-dark uppercase tracking-wide mb-6">Trải Nghiệm Thực Tế</h2>
                     <div class="bg-white rounded-3xl shadow-soft p-4 border border-gray-50 mb-8">
-                        <div class="w-full aspect-video rounded-2xl overflow-hidden bg-gray-100">
-                            <!-- Nhúng Video YouTube giới thiệu Ẩm thực Hà Nội -->
+                        <!-- ĐÃ CẬP NHẬT CHIỀU CAO VÀ CĂN CHỈNH VIDEO -->
+                        <div class="relative w-full h-[280px] md:h-[350px] lg:h-[400px] rounded-2xl overflow-hidden bg-gray-900 shadow-inner flex items-center justify-center">
+                            <!-- Nhúng Video từ Google Drive -->
                             <iframe 
-                                width="100%" 
-                                height="100%" 
-                                src="https://www.youtube.com/embed/Yn1Y5yU1mEI?autoplay=0&mute=0" 
-                                title="Hanoi Street Food" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                src="https://drive.google.com/file/d/1vFdKJkEwm6tGjI7uC7udx5wn0IwgWa7w/preview" 
+                                class="absolute top-0 left-0 w-full h-full border-0" 
+                                allow="autoplay; fullscreen" 
                                 allowfullscreen>
                             </iframe>
                         </div>
                         <p class="text-sm text-gray-600 mt-4 px-2 font-medium text-center">
-                            Này các cậu, hãy xem video này nhé!
+                            Này các cậu! hãy xem video này nhé!!
                         </p>
                     </div>
 
@@ -857,7 +879,7 @@
 
             // III. BẮC TỪ LIÊM
             { district: 'bac-tu-liem', name: 'Phở bò Tư Hậu', address: '521 Thụy Phương', time: '5h30-10h30', desc: 'Nước dùng thanh trong, vị ngọt từ xương hầm, thịt bò tươi mềm.', icon: '🍜', imgFile: 'q-pho-tu-hau.jpg', reviews: [{ name: 'Thế Anh', text: 'Phở truyền thống ăn rất êm bụng.', avatar: 'https://i.pravatar.cc/150?img=15' }] },
-            { district: 'bac-tu-liem', name: 'Nhà Hàng Sáu Béo', address: '152/134 Cầu Diễn', time: '07h-00h', desc: 'Bia mát lạnh, thực đơn nhậu phong phú từ hải sản đến đồ nướng.', icon: '🍻', imgFile: 'q-sau-beo.jpg', reviews: [{ name: 'Trọng Khang', text: 'Quán nhậu lý tưởng khu Cầu Diễn.', avatar: 'https://i.pravatar.cc/150?img=33' }] },
+            { district: 'bac-tu-liem', name: 'Nhà Hàng Sáu Béo', address: '152/134 Cầu Diễn', time: '07h-00h', desc: 'Bia mát lạnh, thực thực đơn nhậu phong phú từ hải sản đến đồ nướng.', icon: '🍻', imgFile: 'q-sau-beo.jpg', reviews: [{ name: 'Trọng Khang', text: 'Quán nhậu lý tưởng khu Cầu Diễn.', avatar: 'https://i.pravatar.cc/150?img=33' }] },
             { district: 'bac-tu-liem', name: 'Lẩu Nấm Gia Khánh', address: '06-C11 Khu Embassy Garden', time: '10h20-22h', desc: 'Nước lẩu thanh ngọt từ nhiều loại nấm tự nhiên, nguyên liệu tươi.', icon: '🍲', imgFile: 'q-lau-nam.jpg', reviews: [{ name: 'Diệu Nhi', text: 'Ăn thanh đạm, tốt cho sức khỏe.', avatar: 'https://i.pravatar.cc/150?img=20' }] },
             { district: 'bac-tu-liem', name: 'Ốc Xứ Thanh', address: '127 Sông Nhuệ', time: '17h15-23h', desc: 'Ốc tươi giòn xào rang đậm đà phong vị miền Trung.', icon: '🐌', imgFile: 'q-oc-xu-thanh.jpg', reviews: [{ name: 'Kim Oanh', text: 'Ốc xào me cay cay ngọt ngọt ngon lắm.', avatar: 'https://i.pravatar.cc/150?img=10' }] },
             { district: 'bac-tu-liem', name: 'Chè bưởi Tư Đỉnh', address: '193/7 Phú Diễn', time: '9h-23h', desc: 'Cùi bưởi giòn sần sật không đắng, nước cốt dừa béo nhẹ.', icon: '🍧', imgFile: 'q-che-tu-dinh.jpg', reviews: [{ name: 'Thùy Trang', text: 'Chè không bị ngọt gắt, cùi bưởi làm rất khéo.', avatar: 'https://i.pravatar.cc/150?img=5' }] },
